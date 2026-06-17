@@ -1,0 +1,589 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BF0000010000000000000001 /* FabioDailyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000001 /* FabioDailyApp.swift */; };
+		BF0000010000000000000002 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000002 /* AppState.swift */; };
+		BF0000010000000000000003 /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000003 /* DomainModels.swift */; };
+		BF0000010000000000000004 /* SwiftDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000004 /* SwiftDataModels.swift */; };
+		BF0000010000000000000005 /* SeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000005 /* SeedData.swift */; };
+		BF0000010000000000000006 /* PlanningEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000006 /* PlanningEngine.swift */; };
+		BF0000010000000000000007 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000007 /* Components.swift */; };
+		BF0000010000000000000008 /* FabioRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000008 /* FabioRootView.swift */; };
+		BF0000010000000000000009 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000009 /* HomeView.swift */; };
+		BF000001000000000000000A /* LogMealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF000002000000000000000A /* LogMealView.swift */; };
+		BF000001000000000000000B /* MealPrepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF000002000000000000000B /* MealPrepView.swift */; };
+		BF000001000000000000000C /* WorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF000002000000000000000C /* WorkoutView.swift */; };
+		BF000001000000000000000D /* MeasurementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF000002000000000000000D /* MeasurementsView.swift */; };
+		BF000001000000000000000E /* DayContextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF000002000000000000000E /* DayContextEditorView.swift */; };
+		BF000001000000000000000F /* AutomaticUpdatesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF000002000000000000000F /* AutomaticUpdatesCard.swift */; };
+		BF0000010000000000000010 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000010 /* ProfileView.swift */; };
+		BF0000010000000000000011 /* LocalRepositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000011 /* LocalRepositories.swift */; };
+		BF0000010000000000000012 /* HealthKitPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000012 /* HealthKitPlaceholder.swift */; };
+		BF0000010000000000000013 /* CalendarPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000013 /* CalendarPlaceholder.swift */; };
+		BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000014 /* WithingsPlaceholder.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BF0000020000000000000001 /* FabioDailyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabioDailyApp.swift; sourceTree = "<group>"; };
+		BF0000020000000000000002 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		BF0000020000000000000003 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
+		BF0000020000000000000004 /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
+		BF0000020000000000000005 /* SeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedData.swift; sourceTree = "<group>"; };
+		BF0000020000000000000006 /* PlanningEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningEngine.swift; sourceTree = "<group>"; };
+		BF0000020000000000000007 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		BF0000020000000000000008 /* FabioRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabioRootView.swift; sourceTree = "<group>"; };
+		BF0000020000000000000009 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		BF000002000000000000000A /* LogMealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMealView.swift; sourceTree = "<group>"; };
+		BF000002000000000000000B /* MealPrepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPrepView.swift; sourceTree = "<group>"; };
+		BF000002000000000000000C /* WorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutView.swift; sourceTree = "<group>"; };
+		BF000002000000000000000D /* MeasurementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementsView.swift; sourceTree = "<group>"; };
+		BF000002000000000000000E /* DayContextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayContextEditorView.swift; sourceTree = "<group>"; };
+		BF000002000000000000000F /* AutomaticUpdatesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticUpdatesCard.swift; sourceTree = "<group>"; };
+		BF0000020000000000000010 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		BF0000020000000000000011 /* LocalRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRepositories.swift; sourceTree = "<group>"; };
+		BF0000020000000000000012 /* HealthKitPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPlaceholder.swift; sourceTree = "<group>"; };
+		BF0000020000000000000013 /* CalendarPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPlaceholder.swift; sourceTree = "<group>"; };
+		BF0000020000000000000014 /* WithingsPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithingsPlaceholder.swift; sourceTree = "<group>"; };
+		BF00000200000000000000FF /* FabioDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabioDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BF0000030000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BF0000040000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				BF0000040000000000000002 /* FabioDaily */,
+				BF00000400000000000000FF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000002 /* FabioDaily */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000040000000000000003 /* App */,
+				BF0000040000000000000004 /* Domain */,
+				BF0000040000000000000008 /* Storage */,
+				BF0000040000000000000015 /* Integrations */,
+				BF000004000000000000000A /* DesignSystem */,
+				BF000004000000000000000B /* Features */,
+			);
+			path = FabioDaily;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000001 /* FabioDailyApp.swift */,
+				BF0000020000000000000002 /* AppState.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000004 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000040000000000000005 /* Models */,
+				BF0000040000000000000006 /* Planning */,
+				BF0000040000000000000007 /* Rules */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000005 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000003 /* DomainModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000006 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000006 /* PlanningEngine.swift */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000007 /* Rules */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000005 /* SeedData.swift */,
+			);
+			path = Rules;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000008 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000040000000000000009 /* LocalStore */,
+				BF0000040000000000000019 /* Repositories */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000009 /* LocalStore */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000004 /* SwiftDataModels.swift */,
+			);
+			path = LocalStore;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000019 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000011 /* LocalRepositories.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000015 /* Integrations */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000040000000000000016 /* HealthKitPlaceholder */,
+				BF0000040000000000000017 /* CalendarPlaceholder */,
+				BF0000040000000000000018 /* WithingsPlaceholder */,
+			);
+			path = Integrations;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000016 /* HealthKitPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000012 /* HealthKitPlaceholder.swift */,
+			);
+			path = HealthKitPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000017 /* CalendarPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000013 /* CalendarPlaceholder.swift */,
+			);
+			path = CalendarPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000018 /* WithingsPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000014 /* WithingsPlaceholder.swift */,
+			);
+			path = WithingsPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000000A /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000007 /* Components.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000000B /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				BF000004000000000000000C /* Main */,
+				BF000004000000000000000D /* Home */,
+				BF000004000000000000000E /* Meals */,
+				BF000004000000000000000F /* MealPrep */,
+				BF0000040000000000000010 /* Workout */,
+				BF0000040000000000000011 /* Measurements */,
+				BF0000040000000000000012 /* DayContext */,
+				BF0000040000000000000013 /* AutomaticUpdates */,
+				BF0000040000000000000014 /* Profile */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000000C /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000008 /* FabioRootView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000000D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000009 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000000E /* Meals */ = {
+			isa = PBXGroup;
+			children = (
+				BF000002000000000000000A /* LogMealView.swift */,
+			);
+			path = Meals;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000000F /* MealPrep */ = {
+			isa = PBXGroup;
+			children = (
+				BF000002000000000000000B /* MealPrepView.swift */,
+			);
+			path = MealPrep;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000010 /* Workout */ = {
+			isa = PBXGroup;
+			children = (
+				BF000002000000000000000C /* WorkoutView.swift */,
+			);
+			path = Workout;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000011 /* Measurements */ = {
+			isa = PBXGroup;
+			children = (
+				BF000002000000000000000D /* MeasurementsView.swift */,
+			);
+			path = Measurements;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000012 /* DayContext */ = {
+			isa = PBXGroup;
+			children = (
+				BF000002000000000000000E /* DayContextEditorView.swift */,
+			);
+			path = DayContext;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000013 /* AutomaticUpdates */ = {
+			isa = PBXGroup;
+			children = (
+				BF000002000000000000000F /* AutomaticUpdatesCard.swift */,
+			);
+			path = AutomaticUpdates;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000014 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000010 /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		BF00000400000000000000FF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BF00000200000000000000FF /* FabioDaily.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BF0000050000000000000001 /* FabioDaily */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF00000A0000000000000002 /* Build configuration list for PBXNativeTarget "FabioDaily" */;
+			buildPhases = (
+				BF0000060000000000000001 /* Sources */,
+				BF0000030000000000000001 /* Frameworks */,
+				BF0000070000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FabioDaily;
+			productName = FabioDaily;
+			productReference = BF00000200000000000000FF /* FabioDaily.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BF0000080000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					BF0000050000000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = BF00000A0000000000000001 /* Build configuration list for PBXProject "FabioDaily" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BF0000040000000000000001;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = BF00000400000000000000FF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BF0000050000000000000001 /* FabioDaily */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BF0000070000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BF0000060000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF0000010000000000000001 /* FabioDailyApp.swift in Sources */,
+				BF0000010000000000000002 /* AppState.swift in Sources */,
+				BF0000010000000000000003 /* DomainModels.swift in Sources */,
+				BF0000010000000000000004 /* SwiftDataModels.swift in Sources */,
+				BF0000010000000000000005 /* SeedData.swift in Sources */,
+				BF0000010000000000000006 /* PlanningEngine.swift in Sources */,
+				BF0000010000000000000007 /* Components.swift in Sources */,
+				BF0000010000000000000008 /* FabioRootView.swift in Sources */,
+				BF0000010000000000000009 /* HomeView.swift in Sources */,
+				BF000001000000000000000A /* LogMealView.swift in Sources */,
+				BF000001000000000000000B /* MealPrepView.swift in Sources */,
+				BF000001000000000000000C /* WorkoutView.swift in Sources */,
+				BF000001000000000000000D /* MeasurementsView.swift in Sources */,
+				BF000001000000000000000E /* DayContextEditorView.swift in Sources */,
+				BF000001000000000000000F /* AutomaticUpdatesCard.swift in Sources */,
+				BF0000010000000000000010 /* ProfileView.swift in Sources */,
+				BF0000010000000000000011 /* LocalRepositories.swift in Sources */,
+				BF0000010000000000000012 /* HealthKitPlaceholder.swift in Sources */,
+				BF0000010000000000000013 /* CalendarPlaceholder.swift in Sources */,
+				BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BF0000090000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BF0000090000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BF0000090000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fabionazzari.FabioDaily;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		BF0000090000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fabionazzari.FabioDaily;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BF00000A0000000000000001 /* Build configuration list for PBXProject "FabioDaily" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF0000090000000000000001 /* Debug */,
+				BF0000090000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF00000A0000000000000002 /* Build configuration list for PBXNativeTarget "FabioDaily" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF0000090000000000000003 /* Debug */,
+				BF0000090000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BF0000080000000000000001 /* Project object */;
+}
