@@ -18,6 +18,7 @@ final class AppState {
     var editingMealLog: MealLogModel?
     var showingDayContextEditor = false
     var healthKitService = HealthKitService()
+    var calendarService = CalendarService()
 
     func startMealLog(_ draft: MealLogDraft?) {
         mealDraft = draft

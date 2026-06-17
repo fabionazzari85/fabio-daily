@@ -110,6 +110,42 @@ enum HealthPermissionState: String, CaseIterable, Codable {
     }
 }
 
+enum CalendarPermissionState: String, CaseIterable, Codable {
+    case notConfigured
+    case requested
+    case active
+    case denied
+    case noCalendars
+    case noEvents
+    case error
+
+    var label: String {
+        switch self {
+        case .notConfigured: "Non configurato"
+        case .requested: "Permesso richiesto"
+        case .active: "Attivo"
+        case .denied: "Calendario non attivo"
+        case .noCalendars: "Nessun calendario disponibile"
+        case .noEvents: "Nessun evento trovato"
+        case .error: "Errore sync"
+        }
+    }
+}
+
+struct CalendarDaySignal {
+    let date: Date
+    var suggestedLocation: DayLocation?
+    var suggestedFamily: DayFamily?
+    var dinnerOutLikely: Bool
+    var travelLikely: Bool
+    var farTravelLikely: Bool
+    var intenseDayLikely: Bool
+    var workoutWindow: DateInterval?
+    var confidence: Double
+    var sourceEventIds: [String]
+    var explanation: String?
+}
+
 struct Profile {
     let name: String
     let heightCm: Int

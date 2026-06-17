@@ -28,6 +28,7 @@
 		BF0000010000000000000013 /* CalendarPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000013 /* CalendarPlaceholder.swift */; };
 		BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000014 /* WithingsPlaceholder.swift */; };
 		BF0000010000000000000015 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000015 /* HealthKitService.swift */; };
+		BF0000010000000000000016 /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000017 /* CalendarService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		BF0000020000000000000014 /* WithingsPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithingsPlaceholder.swift; sourceTree = "<group>"; };
 		BF0000020000000000000015 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		BF0000020000000000000016 /* FabioDaily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FabioDaily.entitlements; sourceTree = "<group>"; };
+		BF0000020000000000000017 /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarService.swift; sourceTree = "<group>"; };
 		BF00000200000000000000FF /* FabioDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabioDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 			children = (
 				BF0000040000000000000016 /* HealthKitPlaceholder */,
 				BF000004000000000000001A /* HealthKit */,
+				BF000004000000000000001B /* Calendar */,
 				BF0000040000000000000017 /* CalendarPlaceholder */,
 				BF0000040000000000000018 /* WithingsPlaceholder */,
 			);
@@ -185,6 +188,14 @@
 				BF0000020000000000000015 /* HealthKitService.swift */,
 			);
 			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000001B /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000017 /* CalendarService.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		BF0000040000000000000017 /* CalendarPlaceholder */ = {
@@ -397,6 +408,7 @@
 				BF0000010000000000000013 /* CalendarPlaceholder.swift in Sources */,
 				BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */,
 				BF0000010000000000000015 /* HealthKitService.swift in Sources */,
+				BF0000010000000000000016 /* CalendarService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +544,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Fabio Daily legge gli eventi del calendario per suggerire trasferta, cena fuori, giornata intensa e finestre workout. Non crea né modifica eventi.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Fabio Daily legge gli eventi del calendario per suggerire la giornata. Non crea né modifica eventi.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Fabio Daily legge workout, passi, calorie attive e peso da Apple Health per aggiornare automaticamente la Home. Le calorie attività non vengono aggiunte al budget alimentare.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -562,6 +576,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Fabio Daily legge gli eventi del calendario per suggerire trasferta, cena fuori, giornata intensa e finestre workout. Non crea né modifica eventi.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Fabio Daily legge gli eventi del calendario per suggerire la giornata. Non crea né modifica eventi.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Fabio Daily legge workout, passi, calorie attive e peso da Apple Health per aggiornare automaticamente la Home. Le calorie attività non vengono aggiunte al budget alimentare.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -8,6 +8,7 @@ struct HomeView: View {
     @Query private var workoutLogs: [WorkoutLogModel]
     @Query private var healthWorkouts: [HealthWorkoutImportModel]
     @Query private var healthDailySummaries: [HealthDailySummaryModel]
+    @Query private var calendarSignals: [CalendarDaySignalModel]
     @Query private var dayContexts: [DayContextModel]
     @Query(sort: \WeightEntryModel.measuredAt, order: .reverse) private var weights: [WeightEntryModel]
 
@@ -20,7 +21,8 @@ struct HomeView: View {
         let workout = workoutLogs.first { $0.dateKey == dateKey }
         let todayHealthWorkouts = healthWorkouts.filter { $0.dateKey == dateKey }
         let dailySummary = healthDailySummaries.first { $0.dateKey == dateKey }
-        let plan = PlanningEngine.recalculateTodayPlan(date: today, dayContext: context, mealLogs: todayMeals, workoutLog: workout, healthWorkouts: todayHealthWorkouts, dailySummary: dailySummary, weights: weights)
+        let calendarSignal = calendarSignals.first { $0.dateKey == dateKey }
+        let plan = PlanningEngine.recalculateTodayPlan(date: today, dayContext: context, mealLogs: todayMeals, workoutLog: workout, healthWorkouts: todayHealthWorkouts, dailySummary: dailySummary, calendarSignal: calendarSignal, weights: weights)
         let trend = WeightTrendCalculator.calculate(weights)
 
         NavigationStack {
@@ -29,6 +31,7 @@ struct HomeView: View {
                     header(plan)
                     metrics(plan)
                     dayContextCard(context: context, plan: plan)
+                    calendarSignalCard(calendarSignal, context: context)
                     mealsSection(plan)
                     quickActions
                     activityCard(dailySummary)
@@ -37,7 +40,7 @@ struct HomeView: View {
                     weightCard(trend)
                     mealLogsSection(todayMeals)
                     suggestions(plan)
-                    AutomaticUpdatesCard(healthKitService: appState.healthKitService)
+                    AutomaticUpdatesCard(healthKitService: appState.healthKitService, calendarService: appState.calendarService)
                 }
                 .padding()
             }
@@ -90,6 +93,39 @@ struct HomeView: View {
                     .foregroundStyle(.green)
                 PrimaryButton(title: "Modifica giornata") {
                     appState.showingDayContextEditor = true
+                }
+            }
+        }
+    }
+
+    private func calendarSignalCard(_ signal: CalendarDaySignalModel?, context: DayContextModel?) -> some View {
+        FDCard {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Calendario")
+                    .font(.title3.weight(.bold))
+                if let signal {
+                    if let explanation = signal.explanation {
+                        Text(explanation)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    HStack {
+                        MetricPill(label: "Luogo", value: signal.suggestedLocation?.label ?? "n/d")
+                        MetricPill(label: "Eventi", value: signal.sourceEventIds.isEmpty ? "letti" : "\(signal.sourceEventIds.count)")
+                    }
+                    if let window = signal.workoutWindow {
+                        Text("Finestra workout suggerita: \(window.start.formatted(date: .omitted, time: .shortened))-\(window.end.formatted(date: .omitted, time: .shortened))")
+                            .font(.caption.weight(.semibold))
+                    }
+                    if context != nil {
+                        Text("Hai impostato la giornata manualmente: questa scelta resta prioritaria.")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.green)
+                    }
+                } else {
+                    Text("Calendario non ancora sincronizzato. Il piano resta manuale e stabile.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
             }
         }

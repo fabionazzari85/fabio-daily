@@ -40,7 +40,7 @@ struct ProfileView: View {
                             .foregroundStyle(.secondary)
                     }
 
-                    AutomaticUpdatesCard(healthKitService: appState.healthKitService)
+                    AutomaticUpdatesCard(healthKitService: appState.healthKitService, calendarService: appState.calendarService)
                 }
                 .padding()
             }

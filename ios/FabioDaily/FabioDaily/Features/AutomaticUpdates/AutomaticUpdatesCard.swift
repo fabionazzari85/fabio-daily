@@ -3,11 +3,15 @@ import SwiftUI
 
 struct AutomaticUpdatesCard: View {
     @Bindable var healthKitService: HealthKitService
+    @Bindable var calendarService: CalendarService
     @Environment(\.modelContext) private var modelContext
     @Query private var syncStatuses: [HealthSyncStatusModel]
     @Query private var dailySummaries: [HealthDailySummaryModel]
     @Query private var importedWorkouts: [HealthWorkoutImportModel]
     @Query(sort: \WeightEntryModel.measuredAt, order: .reverse) private var weights: [WeightEntryModel]
+    @Query private var calendarStatuses: [CalendarSyncStatusModel]
+    @Query private var calendarSignals: [CalendarDaySignalModel]
+    @Query private var calendarEvents: [CalendarEventImportModel]
 
     var body: some View {
         let todayKey = DateKeys.dayKey(Date())
@@ -15,14 +19,21 @@ struct AutomaticUpdatesCard: View {
         let summary = dailySummaries.first { $0.dateKey == todayKey }
         let todayWorkouts = importedWorkouts.filter { $0.dateKey == todayKey }
         let healthWeight = weights.first { $0.source != .manual }
+        let calendarStatus = calendarStatuses.first
+        let todayCalendarSignal = calendarSignals.first { $0.dateKey == todayKey }
+        let todayCalendarEvents = calendarEvents.filter { $0.dateKey == todayKey }
 
         FDCard {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Aggiornamenti automatici")
                     .font(.title3.weight(.bold))
-                Text("Fabio Daily legge workout, passi, calorie attive e peso da Apple Health per aggiornare automaticamente la Home. Le calorie attività non vengono aggiunte al budget alimentare. Puoi continuare a usare l’app anche manualmente.")
+                Text("Fabio Daily può leggere Apple Health e Calendario per suggerire la giornata. Le scelte manuali restano sempre prioritarie.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+
+                Text("Apple Health")
+                    .font(.headline)
+                    .padding(.top, 4)
                 Text("Il peso può essere importato da Apple Health, anche se arriva da una bilancia smart come Withings. Puoi sempre inserirlo manualmente.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -47,10 +58,50 @@ struct AutomaticUpdatesCard: View {
                 PrimaryButton(title: "Collega Apple Health") {
                     Task { await healthKitService.requestAuthorization(modelContext: modelContext) }
                 }
-                SecondaryButton(title: healthKitService.isSyncing ? "Sincronizzazione..." : "Sincronizza ora") {
+                SecondaryButton(title: healthKitService.isSyncing ? "Sincronizzazione..." : "Sincronizza Apple Health") {
                     Task { await healthKitService.syncNow(modelContext: modelContext) }
                 }
                 Text("Apple Health non è attivo o non restituisce dati? Puoi continuare a usare Fabio Daily manualmente.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Divider()
+                    .padding(.vertical, 4)
+
+                Text("Calendario")
+                    .font(.headline)
+                Text("Il calendario viene letto solo per suggerire segnali come trasferta, cena fuori, giornata intensa o finestra workout. Fabio Daily non crea né modifica eventi.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    statusRow("Stato Calendario", value: calendarStatus?.authorizationStatus.label ?? CalendarPermissionState.notConfigured.label)
+                    statusRow("Ultimo sync", value: calendarStatus?.lastSyncAt.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "mai")
+                    statusRow("Eventi letti oggi", value: "\(calendarStatus?.eventsReadToday ?? todayCalendarEvents.count)")
+                    statusRow("Segnale luogo", value: todayCalendarSignal?.suggestedLocation?.label ?? "n/d")
+                    statusRow("Cena fuori", value: todayCalendarSignal?.dinnerOutLikely == true ? "probabile" : "no")
+                    statusRow("Giornata intensa", value: todayCalendarSignal?.intenseDayLikely == true ? "probabile" : "no")
+                }
+
+                if let explanation = todayCalendarSignal?.explanation {
+                    Text(explanation)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+
+                if let error = calendarStatus?.lastErrorMessage, !error.isEmpty {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
+
+                PrimaryButton(title: "Collega Calendario") {
+                    Task { await calendarService.requestAuthorization(modelContext: modelContext) }
+                }
+                SecondaryButton(title: calendarService.isSyncing ? "Sincronizzazione..." : "Sincronizza Calendario") {
+                    Task { await calendarService.syncNow(modelContext: modelContext) }
+                }
+                Text("Calendario non attivo o vuoto? L’app resta utilizzabile con impostazione manuale della giornata.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -163,6 +163,125 @@ final class HealthSyncStatusModel {
 }
 
 @Model
+final class CalendarEventImportModel {
+    @Attribute(.unique) var id: String
+    var eventIdentifier: String
+    var dateKey: String
+    var title: String
+    var eventLocation: String?
+    var notes: String?
+    var startDate: Date
+    var endDate: Date
+    var isAllDay: Bool
+    var calendarTitle: String?
+    var importedAt: Date
+
+    init(eventIdentifier: String, title: String, eventLocation: String?, notes: String?, startDate: Date, endDate: Date, isAllDay: Bool, calendarTitle: String?) {
+        self.eventIdentifier = eventIdentifier
+        self.dateKey = DateKeys.dayKey(startDate)
+        self.id = "\(DateKeys.dayKey(startDate)):\(eventIdentifier)"
+        self.title = title
+        self.eventLocation = eventLocation
+        self.notes = notes
+        self.startDate = startDate
+        self.endDate = endDate
+        self.isAllDay = isAllDay
+        self.calendarTitle = calendarTitle
+        self.importedAt = Date()
+    }
+}
+
+@Model
+final class CalendarDaySignalModel {
+    @Attribute(.unique) var dateKey: String
+    var date: Date
+    var suggestedLocationRaw: String?
+    var suggestedFamilyRaw: String?
+    var dinnerOutLikely: Bool
+    var travelLikely: Bool
+    var farTravelLikely: Bool
+    var intenseDayLikely: Bool
+    var workoutWindowStart: Date?
+    var workoutWindowEnd: Date?
+    var confidence: Double
+    var sourceEventIdsJoined: String
+    var explanation: String?
+    var importedAt: Date
+
+    init(date: Date, signal: CalendarDaySignal) {
+        self.date = date
+        self.dateKey = DateKeys.dayKey(date)
+        self.suggestedLocationRaw = signal.suggestedLocation?.rawValue
+        self.suggestedFamilyRaw = signal.suggestedFamily?.rawValue
+        self.dinnerOutLikely = signal.dinnerOutLikely
+        self.travelLikely = signal.travelLikely
+        self.farTravelLikely = signal.farTravelLikely
+        self.intenseDayLikely = signal.intenseDayLikely
+        self.workoutWindowStart = signal.workoutWindow?.start
+        self.workoutWindowEnd = signal.workoutWindow?.end
+        self.confidence = signal.confidence
+        self.sourceEventIdsJoined = signal.sourceEventIds.joined(separator: "|")
+        self.explanation = signal.explanation
+        self.importedAt = Date()
+    }
+
+    var suggestedLocation: DayLocation? {
+        suggestedLocationRaw.flatMap(DayLocation.init(rawValue:))
+    }
+
+    var suggestedFamily: DayFamily? {
+        suggestedFamilyRaw.flatMap(DayFamily.init(rawValue:))
+    }
+
+    var sourceEventIds: [String] {
+        sourceEventIdsJoined.split(separator: "|").map(String.init)
+    }
+
+    var workoutWindow: DateInterval? {
+        guard let workoutWindowStart, let workoutWindowEnd else { return nil }
+        return DateInterval(start: workoutWindowStart, end: workoutWindowEnd)
+    }
+
+    func update(from signal: CalendarDaySignal) {
+        suggestedLocationRaw = signal.suggestedLocation?.rawValue
+        suggestedFamilyRaw = signal.suggestedFamily?.rawValue
+        dinnerOutLikely = signal.dinnerOutLikely
+        travelLikely = signal.travelLikely
+        farTravelLikely = signal.farTravelLikely
+        intenseDayLikely = signal.intenseDayLikely
+        workoutWindowStart = signal.workoutWindow?.start
+        workoutWindowEnd = signal.workoutWindow?.end
+        confidence = signal.confidence
+        sourceEventIdsJoined = signal.sourceEventIds.joined(separator: "|")
+        explanation = signal.explanation
+        importedAt = Date()
+    }
+}
+
+@Model
+final class CalendarSyncStatusModel {
+    @Attribute(.unique) var id: String
+    var authorizationStatusRaw: String
+    var lastSyncAt: Date?
+    var eventsReadToday: Int
+    var lastErrorMessage: String?
+    var updatedAt: Date
+
+    init(id: String = "calendar", authorizationStatus: CalendarPermissionState = .notConfigured, lastSyncAt: Date? = nil, eventsReadToday: Int = 0, lastErrorMessage: String? = nil) {
+        self.id = id
+        self.authorizationStatusRaw = authorizationStatus.rawValue
+        self.lastSyncAt = lastSyncAt
+        self.eventsReadToday = eventsReadToday
+        self.lastErrorMessage = lastErrorMessage
+        self.updatedAt = Date()
+    }
+
+    var authorizationStatus: CalendarPermissionState {
+        CalendarPermissionState(rawValue: authorizationStatusRaw) ?? .notConfigured
+    }
+}
+
+@Model
 final class WaistEntryModel {
     @Attribute(.unique) var id: String
     var dateKey: String

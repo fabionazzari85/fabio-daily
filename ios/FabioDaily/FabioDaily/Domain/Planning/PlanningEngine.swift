@@ -8,9 +8,10 @@ enum PlanningEngine {
         workoutLog: WorkoutLogModel?,
         healthWorkouts: [HealthWorkoutImportModel] = [],
         dailySummary: HealthDailySummaryModel? = nil,
+        calendarSignal: CalendarDaySignalModel? = nil,
         weights: [WeightEntryModel]
     ) -> TodayPlan {
-        let context = dayContext ?? DayContextModel(dateKey: DateKeys.dayKey(date))
+        let context = dayContext ?? contextFromCalendarSignal(date: date, signal: calendarSignal)
         let target = context.recoveryDay ? SeedData.recoveryTarget : SeedData.activeTarget
         let baseMeals = meals(for: context)
         let plannedMeals = applyFamilyRules(baseMeals, context: context)
@@ -31,7 +32,23 @@ enum PlanningEngine {
             workoutPlan: workoutPlan,
             consumed: consumed,
             remainingKcal: max(target.kcalMax - consumedKcal, 0),
-            suggestions: suggestions(for: context, workoutLog: workoutLog, healthWorkouts: healthWorkouts, dailySummary: dailySummary, weights: weights)
+            suggestions: suggestions(for: context, manualContext: dayContext, calendarSignal: calendarSignal, workoutLog: workoutLog, healthWorkouts: healthWorkouts, dailySummary: dailySummary, weights: weights)
+        )
+    }
+
+    private static func contextFromCalendarSignal(date: Date, signal: CalendarDaySignalModel?) -> DayContextModel {
+        guard let signal else { return DayContextModel(dateKey: DateKeys.dayKey(date)) }
+
+        return DayContextModel(
+            dateKey: DateKeys.dayKey(date),
+            location: signal.suggestedLocation ?? .home,
+            family: signal.suggestedFamily ?? .unset,
+            flags: DayFlags(
+                dinnerOut: signal.dinnerOutLikely,
+                aperitif: false,
+                skippedWorkout: false,
+                recoveryDay: false
+            )
         )
     }
 
@@ -92,8 +109,19 @@ enum PlanningEngine {
         return "Allenamento casa"
     }
 
-    private static func suggestions(for context: DayContextModel, workoutLog: WorkoutLogModel?, healthWorkouts: [HealthWorkoutImportModel], dailySummary: HealthDailySummaryModel?, weights: [WeightEntryModel]) -> [String] {
+    private static func suggestions(for context: DayContextModel, manualContext: DayContextModel?, calendarSignal: CalendarDaySignalModel?, workoutLog: WorkoutLogModel?, healthWorkouts: [HealthWorkoutImportModel], dailySummary: HealthDailySummaryModel?, weights: [WeightEntryModel]) -> [String] {
         var result: [String] = []
+        if let calendarSignal {
+            if let manualContext {
+                result.append("Calendario letto, ma la scelta manuale resta prioritaria: \(manualContext.location.label).")
+            } else if let explanation = calendarSignal.explanation {
+                result.append(explanation)
+            }
+            if calendarSignal.intenseDayLikely { result.append("Calendario intenso: tieni pasti semplici e snack proteico di backup.") }
+            if let window = calendarSignal.workoutWindow, !context.recoveryDay {
+                result.append("Possibile finestra workout: \(window.start.formatted(date: .omitted, time: .shortened))-\(window.end.formatted(date: .omitted, time: .shortened)).")
+            }
+        }
         if context.location == .carTravel { result.append("Porta borsa frigo, acqua, protein bar GF e shaker.") }
         if context.location == .farTravel { result.append("Non cercare perfezione: punta a proteine + piatto semplice.") }
         if context.dinnerOut { result.append("Cena fuori prevista: scegli un piatto principale, parti dalle proteine e non sommare antipasto + primo + dolce.") }

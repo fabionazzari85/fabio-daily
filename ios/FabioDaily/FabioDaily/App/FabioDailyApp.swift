@@ -17,7 +17,10 @@ struct FabioDailyApp: App {
             ShoppingListCheckModel.self,
             HealthWorkoutImportModel.self,
             HealthDailySummaryModel.self,
-            HealthSyncStatusModel.self
+            HealthSyncStatusModel.self,
+            CalendarEventImportModel.self,
+            CalendarDaySignalModel.self,
+            CalendarSyncStatusModel.self
         ])
     }
 }
