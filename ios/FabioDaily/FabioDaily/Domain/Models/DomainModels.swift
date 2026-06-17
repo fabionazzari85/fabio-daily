@@ -90,6 +90,26 @@ enum ImportedDataSource: String, CaseIterable, Codable {
     }
 }
 
+enum HealthPermissionState: String, CaseIterable, Codable {
+    case notConfigured
+    case requested
+    case active
+    case denied
+    case noData
+    case error
+
+    var label: String {
+        switch self {
+        case .notConfigured: "Non configurato"
+        case .requested: "Permesso richiesto"
+        case .active: "Attivo"
+        case .denied: "Permesso negato"
+        case .noData: "Nessun dato trovato"
+        case .error: "Errore sync"
+        }
+    }
+}
+
 struct Profile {
     let name: String
     let heightCm: Int

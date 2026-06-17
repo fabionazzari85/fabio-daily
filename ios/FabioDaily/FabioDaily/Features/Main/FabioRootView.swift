@@ -31,6 +31,7 @@ struct FabioRootView: View {
                 .tabItem { Label("Profilo", systemImage: "person") }
                 .tag(AppTab.profile)
         }
+        .environment(appState)
         .sheet(isPresented: $appState.showingDayContextEditor) {
             DayContextEditorView()
         }

@@ -27,6 +27,7 @@
 		BF0000010000000000000012 /* HealthKitPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000012 /* HealthKitPlaceholder.swift */; };
 		BF0000010000000000000013 /* CalendarPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000013 /* CalendarPlaceholder.swift */; };
 		BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000014 /* WithingsPlaceholder.swift */; };
+		BF0000010000000000000015 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000015 /* HealthKitService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,8 @@
 		BF0000020000000000000012 /* HealthKitPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPlaceholder.swift; sourceTree = "<group>"; };
 		BF0000020000000000000013 /* CalendarPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPlaceholder.swift; sourceTree = "<group>"; };
 		BF0000020000000000000014 /* WithingsPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithingsPlaceholder.swift; sourceTree = "<group>"; };
+		BF0000020000000000000015 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		BF0000020000000000000016 /* FabioDaily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FabioDaily.entitlements; sourceTree = "<group>"; };
 		BF00000200000000000000FF /* FabioDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabioDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -79,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				BF0000040000000000000003 /* App */,
+				BF0000020000000000000016 /* FabioDaily.entitlements */,
 				BF0000040000000000000004 /* Domain */,
 				BF0000040000000000000008 /* Storage */,
 				BF0000040000000000000015 /* Integrations */,
@@ -160,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				BF0000040000000000000016 /* HealthKitPlaceholder */,
+				BF000004000000000000001A /* HealthKit */,
 				BF0000040000000000000017 /* CalendarPlaceholder */,
 				BF0000040000000000000018 /* WithingsPlaceholder */,
 			);
@@ -172,6 +177,14 @@
 				BF0000020000000000000012 /* HealthKitPlaceholder.swift */,
 			);
 			path = HealthKitPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000001A /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000015 /* HealthKitService.swift */,
+			);
+			path = HealthKit;
 			sourceTree = "<group>";
 		};
 		BF0000040000000000000017 /* CalendarPlaceholder */ = {
@@ -383,6 +396,7 @@
 				BF0000010000000000000012 /* HealthKitPlaceholder.swift in Sources */,
 				BF0000010000000000000013 /* CalendarPlaceholder.swift in Sources */,
 				BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */,
+				BF0000010000000000000015 /* HealthKitService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,6 +524,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FabioDaily/FabioDaily.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -517,6 +532,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Fabio Daily legge workout, passi, calorie attive e peso da Apple Health per aggiornare automaticamente la Home. Le calorie attività non vengono aggiunte al budget alimentare.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -538,6 +554,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FabioDaily/FabioDaily.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -545,6 +562,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Fabio Daily legge workout, passi, calorie attive e peso da Apple Health per aggiornare automaticamente la Home. Le calorie attività non vengono aggiunte al budget alimentare.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

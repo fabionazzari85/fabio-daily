@@ -6,6 +6,8 @@ enum PlanningEngine {
         dayContext: DayContextModel?,
         mealLogs: [MealLogModel],
         workoutLog: WorkoutLogModel?,
+        healthWorkouts: [HealthWorkoutImportModel] = [],
+        dailySummary: HealthDailySummaryModel? = nil,
         weights: [WeightEntryModel]
     ) -> TodayPlan {
         let context = dayContext ?? DayContextModel(dateKey: DateKeys.dayKey(date))
@@ -29,7 +31,7 @@ enum PlanningEngine {
             workoutPlan: workoutPlan,
             consumed: consumed,
             remainingKcal: max(target.kcalMax - consumedKcal, 0),
-            suggestions: suggestions(for: context, workoutLog: workoutLog, weights: weights)
+            suggestions: suggestions(for: context, workoutLog: workoutLog, healthWorkouts: healthWorkouts, dailySummary: dailySummary, weights: weights)
         )
     }
 
@@ -90,7 +92,7 @@ enum PlanningEngine {
         return "Allenamento casa"
     }
 
-    private static func suggestions(for context: DayContextModel, workoutLog: WorkoutLogModel?, weights: [WeightEntryModel]) -> [String] {
+    private static func suggestions(for context: DayContextModel, workoutLog: WorkoutLogModel?, healthWorkouts: [HealthWorkoutImportModel], dailySummary: HealthDailySummaryModel?, weights: [WeightEntryModel]) -> [String] {
         var result: [String] = []
         if context.location == .carTravel { result.append("Porta borsa frigo, acqua, protein bar GF e shaker.") }
         if context.location == .farTravel { result.append("Non cercare perfezione: punta a proteine + piatto semplice.") }
@@ -98,7 +100,8 @@ enum PlanningEngine {
         if context.aperitif { result.append("Aperitivo/gin tonic previsto: considera circa 180 kcal, ma registralo solo se lo bevi davvero.") }
         if context.skippedWorkout { result.append("Allenamento saltato: nessun tono punitivo. Mantieni proteine alte e fai una camminata breve se possibile.") }
         if context.recoveryDay { result.append("Giorno recupero: circa 1700 kcal, proteine alte e carboidrati più controllati.") }
-        if workoutLog?.completed == true { result.append("Workout segnato come fatto. Le calorie attività restano un indicatore.") }
+        if workoutLog?.completed == true || !healthWorkouts.isEmpty { result.append("Workout segnato o importato. Le calorie attività restano un indicatore, non un bonus automatico.") }
+        if let steps = dailySummary?.steps, steps > 0 { result.append("Attività importata: \(steps) passi oggi.") }
         if result.isEmpty { result.append("Giornata lineare: proteine prioritarie, porzioni piccole e acqua regolare.") }
         return result
     }
@@ -131,7 +134,7 @@ struct WeightTrend {
 
 enum WeightTrendCalculator {
     static func calculate(_ entries: [WeightEntryModel]) -> WeightTrend {
-        let sorted = entries.sorted { $0.measuredAt > $1.measuredAt }
+        let sorted = representativeDailyWeights(entries).sorted { $0.measuredAt > $1.measuredAt }
         let latest = sorted.first
         let recent = Array(sorted.prefix(7))
         let previous = Array(sorted.dropFirst(7).prefix(7))
@@ -158,5 +161,15 @@ enum WeightTrendCalculator {
     private static func average(_ entries: [WeightEntryModel]) -> Double? {
         guard !entries.isEmpty else { return nil }
         return entries.reduce(0.0) { $0 + $1.weightKg } / Double(entries.count)
+    }
+
+    private static func representativeDailyWeights(_ entries: [WeightEntryModel]) -> [WeightEntryModel] {
+        let grouped = Dictionary(grouping: entries, by: \.dateKey)
+        return grouped.values.compactMap { dayEntries in
+            if let manual = dayEntries.filter({ $0.source == .manual }).sorted(by: { $0.measuredAt > $1.measuredAt }).first {
+                return manual
+            }
+            return dayEntries.sorted(by: { $0.measuredAt > $1.measuredAt }).first
+        }
     }
 }

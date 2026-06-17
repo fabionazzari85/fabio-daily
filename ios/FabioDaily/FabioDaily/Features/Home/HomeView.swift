@@ -6,6 +6,8 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var mealLogs: [MealLogModel]
     @Query private var workoutLogs: [WorkoutLogModel]
+    @Query private var healthWorkouts: [HealthWorkoutImportModel]
+    @Query private var healthDailySummaries: [HealthDailySummaryModel]
     @Query private var dayContexts: [DayContextModel]
     @Query(sort: \WeightEntryModel.measuredAt, order: .reverse) private var weights: [WeightEntryModel]
 
@@ -16,7 +18,9 @@ struct HomeView: View {
         let todayMeals = mealLogs.filter { $0.dateKey == dateKey }
         let context = dayContexts.first { $0.dateKey == dateKey }
         let workout = workoutLogs.first { $0.dateKey == dateKey }
-        let plan = PlanningEngine.recalculateTodayPlan(date: today, dayContext: context, mealLogs: todayMeals, workoutLog: workout, weights: weights)
+        let todayHealthWorkouts = healthWorkouts.filter { $0.dateKey == dateKey }
+        let dailySummary = healthDailySummaries.first { $0.dateKey == dateKey }
+        let plan = PlanningEngine.recalculateTodayPlan(date: today, dayContext: context, mealLogs: todayMeals, workoutLog: workout, healthWorkouts: todayHealthWorkouts, dailySummary: dailySummary, weights: weights)
         let trend = WeightTrendCalculator.calculate(weights)
 
         NavigationStack {
@@ -27,11 +31,13 @@ struct HomeView: View {
                     dayContextCard(context: context, plan: plan)
                     mealsSection(plan)
                     quickActions
+                    activityCard(dailySummary)
                     workoutCard(plan: plan, workout: workout)
+                    importedWorkoutCard(todayHealthWorkouts)
                     weightCard(trend)
                     mealLogsSection(todayMeals)
                     suggestions(plan)
-                    AutomaticUpdatesCard()
+                    AutomaticUpdatesCard(healthKitService: appState.healthKitService)
                 }
                 .padding()
             }
@@ -160,6 +166,50 @@ struct HomeView: View {
                 Text("Le calorie attività non vengono aggiunte automaticamente al budget alimentare.")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func activityCard(_ summary: HealthDailySummaryModel?) -> some View {
+        FDCard {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Attività oggi")
+                    .font(.title3.weight(.bold))
+                if let summary {
+                    Text("\(summary.steps ?? 0) passi · \(Int(summary.activeEnergyKcal ?? 0)) kcal attive · \((summary.walkingRunningDistanceKm ?? 0).oneDecimal) km")
+                        .font(.headline)
+                } else {
+                    Text("Nessun dato Apple Health importato oggi.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Text("Le calorie attività non sono aggiunte automaticamente al piano alimentare.")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func importedWorkoutCard(_ workouts: [HealthWorkoutImportModel]) -> some View {
+        FDCard {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Workout Apple Health")
+                    .font(.title3.weight(.bold))
+                if workouts.isEmpty {
+                    Text("Nessun workout importato oggi.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(workouts) { workout in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("\(workout.workoutType) · \(Int(workout.durationMinutes)) min · \(Int(workout.activeCalories ?? 0)) kcal attive\(workout.distanceKm.map { " · \($0.oneDecimal) km" } ?? "")")
+                                .font(.subheadline.weight(.semibold))
+                            Text("Importato da Apple Health")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
         }
     }

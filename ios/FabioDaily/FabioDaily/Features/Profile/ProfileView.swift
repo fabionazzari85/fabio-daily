@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @Environment(AppState.self) private var appState
     private let profile = SeedData.profile
 
     var body: some View {
@@ -39,7 +40,7 @@ struct ProfileView: View {
                             .foregroundStyle(.secondary)
                     }
 
-                    AutomaticUpdatesCard()
+                    AutomaticUpdatesCard(healthKitService: appState.healthKitService)
                 }
                 .padding()
             }

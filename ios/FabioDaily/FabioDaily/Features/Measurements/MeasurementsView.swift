@@ -15,6 +15,8 @@ struct MeasurementsView: View {
 
     var body: some View {
         let trend = WeightTrendCalculator.calculate(weights)
+        let todayManual = weights.first { $0.dateKey == dateKey && $0.source == .manual }
+        let todayHealth = weights.first { $0.dateKey == dateKey && $0.source != .manual }
 
         NavigationStack {
             ScrollView {
@@ -29,6 +31,15 @@ struct MeasurementsView: View {
                         Text("Il peso singolo può oscillare per acqua, sale, viaggio, allenamento e sonno. Guarda soprattutto la media.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                        if let todayManual, let todayHealth {
+                            Text("Peso manuale: \(todayManual.weightKg.oneDecimal) kg · Peso Apple Health: \(todayHealth.weightKg.oneDecimal) kg · Usato per trend: manuale")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        } else if let todayHealth {
+                            Text("Peso importato da Apple Health: \(todayHealth.weightKg.oneDecimal) kg")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
                     }
 
                     FDCard {
@@ -74,6 +85,11 @@ struct MeasurementsView: View {
                                     Text("\(entry.source.label) · \(entry.dateKey)")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
+                                    if entry.source != .manual {
+                                        Text("Importato da Apple Health\(entry.sourceName.map { " · Origine: \($0)" } ?? "")")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
                                     if !entry.note.isEmpty { Text(entry.note).font(.caption) }
                                 }
                                 Spacer()

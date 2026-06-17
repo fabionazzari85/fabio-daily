@@ -4,6 +4,7 @@ import SwiftUI
 struct WorkoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var workoutLogs: [WorkoutLogModel]
+    @Query(sort: \HealthWorkoutImportModel.startDate, order: .reverse) private var importedWorkouts: [HealthWorkoutImportModel]
 
     @State private var completed = false
     @State private var duration = ""
@@ -16,6 +17,7 @@ struct WorkoutView: View {
 
     var body: some View {
         let existing = workoutLogs.first { $0.dateKey == dateKey }
+        let todayImported = importedWorkouts.filter { $0.dateKey == dateKey }
 
         NavigationStack {
             Form {
@@ -43,6 +45,26 @@ struct WorkoutView: View {
                         Text("duro").tag("duro")
                     }
                     TextField("Note", text: $notes, axis: .vertical)
+                }
+
+                Section("Apple Health") {
+                    if todayImported.isEmpty {
+                        Text("Nessun workout importato da Apple Health oggi.")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(todayImported) { workout in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("\(workout.workoutType) · \(Int(workout.durationMinutes)) min · \(Int(workout.activeCalories ?? 0)) kcal attive\(workout.distanceKm.map { " · \($0.oneDecimal) km" } ?? "")")
+                                    .font(.subheadline.weight(.semibold))
+                                Text("Workout importato da Apple Health")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    Text("Se esistono workout manuali e importati, la Home considera completato se almeno uno è presente.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Button("Salva workout") { save(existing) }

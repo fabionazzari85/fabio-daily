@@ -11,11 +11,13 @@ enum AppTab: String, CaseIterable {
 }
 
 @Observable
+@MainActor
 final class AppState {
     var selectedTab: AppTab = .home
     var mealDraft: MealLogDraft?
     var editingMealLog: MealLogModel?
     var showingDayContextEditor = false
+    var healthKitService = HealthKitService()
 
     func startMealLog(_ draft: MealLogDraft?) {
         mealDraft = draft
