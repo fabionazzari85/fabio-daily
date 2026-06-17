@@ -24,6 +24,21 @@ export type DayTag =
   | "sundayFreeMeal"
   | "missedPlan";
 
+export type DayLocation = "home" | "car_travel" | "far_travel";
+export type DayFamily = "with_edoardo" | "without_edoardo" | "unset";
+
+export type DayContext = {
+  date: string;
+  location: DayLocation;
+  family: DayFamily;
+  flags: {
+    dinnerOut: boolean;
+    aperitif: boolean;
+    skippedWorkout: boolean;
+    recoveryDay: boolean;
+  };
+};
+
 export type ResolvedDayType =
   | "homeWorkout"
   | "walkRun"

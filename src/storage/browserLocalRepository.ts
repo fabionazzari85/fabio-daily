@@ -1,6 +1,6 @@
 "use client";
 
-import type { DayTag, MealLog, MealPrepState, ShoppingListCategory, WaistEntry, WeightEntry, WorkoutLog } from "@/domain/types";
+import type { DayContext, DayTag, MealLog, MealPrepState, ShoppingListCategory, WaistEntry, WeightEntry, WorkoutLog } from "@/domain/types";
 import type { LocalRepository } from "@/storage/localRepository";
 
 const keys = {
@@ -9,6 +9,7 @@ const keys = {
   weightEntries: "fabio-daily:weight-entries",
   waistEntries: "fabio-daily:waist-entries",
   dayTags: "fabio-daily:day-tags",
+  dayContexts: "fabio-daily:day-contexts",
   mealPrepStates: "fabio-daily:meal-prep-states",
   shoppingListStates: "fabio-daily:shopping-list-states",
 };
@@ -79,6 +80,18 @@ export const browserLocalRepository: LocalRepository = {
   },
   async getDayTags(date) {
     return readRecord<DayTag[]>(keys.dayTags, {})[date] ?? [];
+  },
+  async saveDayContext(context) {
+    const contexts = readRecord<DayContext>(keys.dayContexts, {});
+    writeRecord(keys.dayContexts, { ...contexts, [context.date]: context });
+  },
+  async getDayContext(date) {
+    return readRecord<DayContext>(keys.dayContexts, {})[date] ?? null;
+  },
+  async resetDayContext(date) {
+    const contexts = readRecord<DayContext>(keys.dayContexts, {});
+    delete contexts[date];
+    writeRecord(keys.dayContexts, contexts);
   },
   async getMealPrepState(weekId) {
     return readRecord<MealPrepState>(keys.mealPrepStates, {})[weekId] ?? null;

@@ -1,6 +1,6 @@
 import { Dumbbell, Home, PlusCircle, Scale, ShoppingBasket, User } from "lucide-react";
 
-export type AppScreen = "home" | "log" | "prep" | "workout" | "measurements" | "profile";
+export type AppScreen = "home" | "log" | "prep" | "workout" | "measurements" | "profile" | "dayContext";
 
 const navItems = [
   { label: "Home", icon: Home, screen: "home" as const, enabled: true },

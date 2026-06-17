@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { BottomNavigation, type AppScreen } from "@/components/BottomNavigation";
+import { DayContextEditor } from "@/components/DayContextEditor";
 import { HomeDashboard } from "@/components/HomeDashboard";
 import { LogMealScreen } from "@/components/LogMealScreen";
 import { MeasurementsScreen } from "@/components/MeasurementsScreen";
@@ -9,19 +10,21 @@ import { MealPrepShoppingScreen } from "@/components/MealPrepShoppingScreen";
 import { ProfileSettingsScreen } from "@/components/ProfileSettingsScreen";
 import { WorkoutScreen } from "@/components/WorkoutScreen";
 import { fabioProfile } from "@/data/fabioProfile";
-import type { DayTag, MealLog, MealLogDraft, WaistEntry, WeightEntry, WorkoutLog } from "@/domain/types";
+import type { DayContext, DayTag, MealLog, MealLogDraft, WaistEntry, WeightEntry, WorkoutLog } from "@/domain/types";
+import { createDefaultDayContext, dayContextToTags, normalizeDayContext } from "@/logic/dayContext";
 import { getWeekId, toDateKey } from "@/logic/date";
 import { generateTodayPlan } from "@/logic/generateTodayPlan";
 import { browserLocalRepository } from "@/storage/browserLocalRepository";
 
-const defaultActiveTags: DayTag[] = ["withoutEdoardo"];
+const defaultActiveTags: DayTag[] = [];
 const activeScreenKey = "fabio-daily:active-screen";
 
 export function FabioApp() {
   const [activeScreen, setActiveScreen] = useState<AppScreen>("home");
   const [today] = useState(() => new Date());
   const [mealLogs, setMealLogs] = useState<MealLog[]>([]);
-  const [activeTags, setActiveTags] = useState<DayTag[]>(defaultActiveTags);
+  const [legacyActiveTags, setLegacyActiveTags] = useState<DayTag[]>(defaultActiveTags);
+  const [dayContext, setDayContext] = useState<DayContext>(() => createDefaultDayContext(toDateKey(new Date())));
   const [workoutLog, setWorkoutLog] = useState<WorkoutLog | null>(null);
   const [weightEntries, setWeightEntries] = useState<WeightEntry[]>([]);
   const [waistEntries, setWaistEntries] = useState<WaistEntry[]>([]);
@@ -49,9 +52,10 @@ export function FabioApp() {
     let cancelled = false;
 
     async function loadLocalData() {
-      const [storedMealLogs, storedTags, storedWorkoutLog, storedWeightEntries, storedWaistEntries] = await Promise.all([
+      const [storedMealLogs, storedTags, storedDayContext, storedWorkoutLog, storedWeightEntries, storedWaistEntries] = await Promise.all([
         browserLocalRepository.getMealLogsByDate(dateKey),
         browserLocalRepository.getDayTags(dateKey),
+        browserLocalRepository.getDayContext(dateKey),
         browserLocalRepository.getWorkoutLogByDate(dateKey),
         browserLocalRepository.getWeightEntries(),
         browserLocalRepository.getWaistEntries(),
@@ -59,7 +63,8 @@ export function FabioApp() {
 
       if (!cancelled) {
         setMealLogs(storedMealLogs);
-        setActiveTags(storedTags.length ? storedTags : defaultActiveTags);
+        setLegacyActiveTags(storedTags.length ? storedTags : defaultActiveTags);
+        setDayContext(normalizeDayContext(dateKey, storedDayContext));
         setWorkoutLog(storedWorkoutLog);
         setWeightEntries(storedWeightEntries);
         setWaistEntries(storedWaistEntries);
@@ -74,9 +79,11 @@ export function FabioApp() {
     };
   }, [dateKey]);
 
+  const activeTags = useMemo(() => [...legacyActiveTags, ...dayContextToTags(dayContext)], [dayContext, legacyActiveTags]);
+
   const plan = useMemo(
-    () => generateTodayPlan(today, activeTags, mealLogs, workoutLog ? [workoutLog] : [], fabioProfile),
-    [activeTags, mealLogs, today, workoutLog],
+    () => generateTodayPlan(today, activeTags, mealLogs, workoutLog ? [workoutLog] : [], fabioProfile, dayContext),
+    [activeTags, dayContext, mealLogs, today, workoutLog],
   );
 
   async function handleSaveMealLog(mealLog: MealLog) {
@@ -110,6 +117,19 @@ export function FabioApp() {
     setEditingMealLog(null);
     setMealLogDraft(draft ?? null);
     setActiveScreen("log");
+  }
+
+  async function handleSaveDayContext(nextDayContext: DayContext) {
+    const normalizedContext = normalizeDayContext(dateKey, { ...nextDayContext, date: dateKey });
+    await browserLocalRepository.saveDayContext(normalizedContext);
+    setDayContext(normalizedContext);
+    setActiveScreen("home");
+  }
+
+  async function handleResetDayContext() {
+    await browserLocalRepository.resetDayContext(dateKey);
+    setDayContext(createDefaultDayContext(dateKey));
+    setActiveScreen("home");
   }
 
   async function handleSaveWorkoutLog(nextWorkoutLog: WorkoutLog) {
@@ -146,7 +166,15 @@ export function FabioApp() {
 
   return (
     <>
-      {activeScreen === "log" ? (
+      {activeScreen === "dayContext" ? (
+        <DayContextEditor
+          date={dateKey}
+          value={dayContext}
+          onSave={handleSaveDayContext}
+          onReset={handleResetDayContext}
+          onCancel={() => setActiveScreen("home")}
+        />
+      ) : activeScreen === "log" ? (
         <LogMealScreen date={dateKey} onSave={handleSaveMealLog} onCancel={handleCancelLog} initialMealLog={editingMealLog} initialDraft={mealLogDraft} />
       ) : activeScreen === "prep" ? (
         <MealPrepShoppingScreen weekId={weekId} />
@@ -172,7 +200,9 @@ export function FabioApp() {
           workoutLog={workoutLog}
           weightEntries={weightEntries}
           loaded={loaded}
+          dayContext={dayContext}
           onLogMeal={handleStartMealLog}
+          onEditDayContext={() => setActiveScreen("dayContext")}
           onDeleteMealLog={handleDeleteMealLog}
           onEditMealLog={handleEditMealLog}
           onOpenPrep={() => setActiveScreen("prep")}

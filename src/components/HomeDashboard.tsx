@@ -1,8 +1,9 @@
 import { AlertTriangle, CalendarDays, Dumbbell, Flame, Pencil, PlusCircle, Scale, ShoppingBasket, Trash2, User, Utensils } from "lucide-react";
 import { mealLogCategoryOptions, mealSlotOptions } from "@/data/mealLogOptions";
 import { rawWeightNote } from "@/data/mealPrepTemplates";
-import type { MealLog, MealLogCategory, MealLogDraft, MealSlot, MealTemplate, TodayPlan, WeightEntry } from "@/domain/types";
+import type { DayContext, MealLog, MealLogCategory, MealLogDraft, MealSlot, MealTemplate, TodayPlan, WeightEntry } from "@/domain/types";
 import { calculateWeightTrend } from "@/logic/calculateWeightTrend";
+import { formatDayContextSummary } from "@/logic/dayContext";
 import { formatItalianDate } from "@/logic/date";
 import { MacroPill } from "@/components/MacroPill";
 
@@ -13,7 +14,9 @@ type HomeDashboardProps = {
   workoutLog: import("@/domain/types").WorkoutLog | null;
   weightEntries: WeightEntry[];
   loaded: boolean;
+  dayContext: DayContext;
   onLogMeal: (draft?: MealLogDraft) => void;
+  onEditDayContext: () => void;
   onDeleteMealLog: (mealLog: MealLog) => void;
   onEditMealLog: (mealLog: MealLog) => void;
   onOpenPrep: () => void;
@@ -29,7 +32,9 @@ export function HomeDashboard({
   workoutLog,
   weightEntries,
   loaded,
+  dayContext,
   onLogMeal,
+  onEditDayContext,
   onDeleteMealLog,
   onEditMealLog,
   onOpenPrep,
@@ -78,6 +83,24 @@ export function HomeDashboard({
           <MacroPill label="Carbo" value={macroRemainingLabel(mealLogs, "carbsG", plan.remaining.carbsG)} />
           <MacroPill label="Grassi" value={macroRemainingLabel(mealLogs, "fatG", plan.remaining.fatG)} />
         </div>
+      </section>
+
+      <section className="mb-4 rounded-lg border border-accent bg-surface p-4 shadow-sm">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold">Giornata di oggi</h2>
+            <p className="mt-2 text-sm font-bold leading-relaxed text-accent-strong">{formatDayContextSummary(dayContext, plan.dayLabel)}</p>
+          </div>
+          <CalendarDays className="shrink-0 text-accent" size={24} />
+        </div>
+        <p className="text-sm leading-relaxed text-muted">Queste scelte aggiornano pasti, note operative e target della Home.</p>
+        <button
+          type="button"
+          onClick={onEditDayContext}
+          className="mt-3 flex h-11 w-full items-center justify-center rounded-lg bg-accent text-sm font-bold text-white"
+        >
+          Modifica giornata
+        </button>
       </section>
 
       <section className="mb-4 rounded-lg border-2 border-accent bg-surface p-4 shadow-sm">

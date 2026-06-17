@@ -155,9 +155,13 @@ export const travelCarMealTemplates: MealTemplate[] = [
   {
     id: "travel-car-lunch",
     slot: "lunch",
-    title: "Meal prep in borsa frigo",
-    description: "Bowl freezer gia porzionata: proteina da crudo gia indicata in prep + riso/quinoa/grano saraceno 50-60 g da crudo.",
+    title: "Pranzo freddo / wrap pollo",
+    description: "Meal prep trasportabile oppure wrap/piadina GF assemblato fresco: 1 wrap/piadina senza glutine, kcal da etichetta + pollo/tacchino 180-220 g da crudo + verdure cotte/grigliate + salsa yogurt delattosato o 1 cucchiaino olio EVO. Il wrap sostituisce riso/pasta/patate: non è un extra.",
     estimatedMacros: { kcal: 520, proteinG: 45, carbsG: 55, fatG: 14 },
+    alternatives: [
+      "Bowl fredda con proteina pronta + riso/quinoa/grano saraceno 50-60 g da crudo",
+      "Protein bar GF + frutto se il pranzo slitta",
+    ],
   },
   {
     id: "travel-car-snack",
@@ -169,8 +173,8 @@ export const travelCarMealTemplates: MealTemplate[] = [
   {
     id: "travel-car-dinner",
     slot: "dinner",
-    title: "Cena fuori: un piatto solo",
-    description: "Pesce/tagliata/poke GF con proteina, oppure pasta GF 60-70 g da crudo se disponibile come porzione chiara.",
+    title: "Cena semplice o piatto unico",
+    description: "Pesce/tagliata/poke GF con proteina, oppure pasta GF 60-70 g da crudo se disponibile come porzione chiara. Scegli un piatto unico e chiudi semplice.",
     estimatedMacros: { kcal: 650, proteinG: 45, carbsG: 65, fatG: 22 },
   },
 ];
@@ -179,29 +183,29 @@ export const travelFarMealTemplates: MealTemplate[] = [
   {
     id: "travel-far-breakfast",
     slot: "breakfast",
-    title: "Hotel breakfast preset",
-    description: "Yogurt, frutta, semi, 10-15 g frutta secca, cappuccino, eventuale barretta GF.",
+    title: "Colazione hotel controllata",
+    description: "Hotel: yogurt, frutta, semi, 10-15 g frutta secca, cappuccino, eventuale barretta GF. Proteine prima se disponibili.",
     estimatedMacros: { kcal: 420, proteinG: 32, carbsG: 40, fatG: 15 },
   },
   {
     id: "travel-far-lunch",
     slot: "lunch",
     title: "Pranzo fuori controllato",
-    description: "Bar, ristorante o supermercato: proteine prioritarie e carboidrato semplice senza glutine. Quando puoi, usa porzioni crude dichiarate o etichette.",
+    description: "Bar, ristorante o supermercato: proteine prioritarie e carboidrato semplice senza glutine. Non cercare perfezione: piatto semplice e leggibile.",
     estimatedMacros: { kcal: 580, proteinG: 40, carbsG: 60, fatG: 18 },
   },
   {
     id: "travel-far-snack",
     slot: "snack",
     title: "Kit emergenza",
-    description: "Barretta proteica GF, frutto o yogurt proteico se disponibile.",
+    description: "Emergency kit: barretta proteica GF, frutto, shaker o yogurt proteico se disponibile.",
     estimatedMacros: { kcal: 240, proteinG: 22, carbsG: 26, fatG: 6 },
   },
   {
     id: "travel-far-dinner",
     slot: "dinner",
     title: "Cena fuori: un piatto solo",
-    description: "Scegli un piatto completo, senza inseguire la perfezione.",
+    description: "Cena fuori con piatto unico: proteine + contorno + carboidrato semplice se serve. Punta al controllo, non alla perfezione.",
     estimatedMacros: { kcal: 700, proteinG: 45, carbsG: 70, fatG: 24 },
   },
 ];

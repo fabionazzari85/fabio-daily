@@ -118,6 +118,12 @@ export function ProfileSettingsScreen({ profile }: ProfileSettingsScreenProps) {
             "MVP PWA: workout inserito manualmente.",
             "Versione iOS futura: import automatico da Apple Health / Apple Watch.",
             "Dati futuri: workout completati, camminata/corsa, durata, calorie attive, passi.",
+            "Prossimo step: app nativa iPhone.",
+            "Obiettivo futuro: aggiornamenti automatici da Apple Health, Apple Watch, calendario e bilancia smart.",
+            "App nativa futura: import workout, durata allenamento, calorie attive, camminata/corsa e passi.",
+            "App nativa futura: peso corporeo da Withings o Apple Health.",
+            "App nativa futura: calendario per capire casa, trasferta e giornate con Edoardo.",
+            "App nativa futura: aggiornamento automatico della Home e ricalcolo giornaliero più intelligente.",
             "Le calorie attivita non saranno aggiunte automaticamente al budget alimentare.",
           ]}
         />

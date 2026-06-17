@@ -1,4 +1,4 @@
-import type { DayTag, MealLog, MealPrepState, ShoppingListCategory, WaistEntry, WeightEntry, WorkoutLog } from "@/domain/types";
+import type { DayContext, DayTag, MealLog, MealPrepState, ShoppingListCategory, WaistEntry, WeightEntry, WorkoutLog } from "@/domain/types";
 
 export type LocalRepository = {
   saveMealLog(log: MealLog): Promise<void>;
@@ -15,6 +15,9 @@ export type LocalRepository = {
   deleteWaistEntry(id: string): Promise<void>;
   saveDayTags(date: string, tags: DayTag[]): Promise<void>;
   getDayTags(date: string): Promise<DayTag[]>;
+  saveDayContext(context: DayContext): Promise<void>;
+  getDayContext(date: string): Promise<DayContext | null>;
+  resetDayContext(date: string): Promise<void>;
   getMealPrepState(weekId: string): Promise<MealPrepState | null>;
   saveMealPrepState(weekId: string, state: MealPrepState): Promise<void>;
   getShoppingListState(weekId: string): Promise<ShoppingListCategory[] | null>;
@@ -28,6 +31,7 @@ const memoryStore = {
   weightEntries: [] as WeightEntry[],
   waistEntries: [] as WaistEntry[],
   dayTags: new Map<string, DayTag[]>(),
+  dayContexts: new Map<string, DayContext>(),
   mealPrepStates: new Map<string, MealPrepState>(),
   shoppingListStates: new Map<string, ShoppingListCategory[]>(),
 };
@@ -79,6 +83,15 @@ export const mockLocalRepository: LocalRepository = {
   },
   async getDayTags(date) {
     return memoryStore.dayTags.get(date) ?? [];
+  },
+  async saveDayContext(context) {
+    memoryStore.dayContexts.set(context.date, context);
+  },
+  async getDayContext(date) {
+    return memoryStore.dayContexts.get(date) ?? null;
+  },
+  async resetDayContext(date) {
+    memoryStore.dayContexts.delete(date);
   },
   async getMealPrepState(weekId) {
     return memoryStore.mealPrepStates.get(weekId) ?? null;

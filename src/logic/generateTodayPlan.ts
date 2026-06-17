@@ -8,7 +8,8 @@ import {
 } from "@/data/mealTemplates";
 import { nutritionTargets } from "@/data/nutritionTargets";
 import { weeklyTemplate } from "@/data/weeklyTemplate";
-import type { DayTag, MacroTarget, MealLog, MealTemplate, ResolvedDayType, TodayPlan, UserProfile, WorkoutLog } from "@/domain/types";
+import type { DayContext, DayTag, MacroTarget, MealLog, MealTemplate, ResolvedDayType, TodayPlan, UserProfile, WorkoutLog } from "@/domain/types";
+import { dayContextToTags } from "@/logic/dayContext";
 import { toDateKey } from "@/logic/date";
 
 export function generateTodayPlan(
@@ -17,10 +18,11 @@ export function generateTodayPlan(
   mealLogs: MealLog[],
   workoutLogs: WorkoutLog[],
   profile: UserProfile,
+  dayContext?: DayContext,
 ): TodayPlan {
   const dateKey = toDateKey(date);
   const weekdayTemplate = weeklyTemplate[date.getDay()];
-  const mergedTags = uniqueTags([...weekdayTemplate.defaultTags, ...activeTags]);
+  const mergedTags = uniqueTags([...weekdayTemplate.defaultTags, ...activeTags, ...(dayContext ? dayContextToTags(dayContext) : [])]);
   const resolvedDayType = resolveDayType(mergedTags);
   const nutritionDefinition = nutritionTargets.find((target) => target.dayType === resolvedDayType) ?? nutritionTargets[0];
   const plannedMeals = selectMealTemplates(resolvedDayType, mergedTags);
@@ -56,6 +58,7 @@ function uniqueTags(tags: DayTag[]): DayTag[] {
 }
 
 function resolveDayType(tags: DayTag[]): ResolvedDayType {
+  if (tags.includes("recovery")) return "recovery";
   if (tags.includes("travelFarNoMealPrep")) return "travelFarNoMealPrep";
   if (tags.includes("travelCarMealPrep")) return "travelCarMealPrep";
   if (tags.includes("sundayFreeMeal")) return "sundayFreeMeal";
@@ -65,10 +68,20 @@ function resolveDayType(tags: DayTag[]): ResolvedDayType {
 }
 
 function selectMealTemplates(dayType: ResolvedDayType, tags: DayTag[]): MealTemplate[] {
-  if (dayType === "travelFarNoMealPrep") return travelFarMealTemplates;
-  if (dayType === "travelCarMealPrep") return travelCarMealTemplates;
+  const baseTemplates =
+    dayType === "travelFarNoMealPrep"
+      ? travelFarMealTemplates
+      : dayType === "travelCarMealPrep"
+        ? travelCarMealTemplates
+        : dayType === "sundayFreeMeal"
+          ? sundayFreeMealTemplates
+          : dayType === "homeWorkout"
+            ? homeWorkoutMealTemplates
+            : dayType === "walkRun"
+              ? walkRunMealTemplates
+              : recoveryMealTemplates;
+
   if (dayType === "sundayFreeMeal") return sundayFreeMealTemplates;
-  const baseTemplates = dayType === "homeWorkout" ? homeWorkoutMealTemplates : dayType === "walkRun" ? walkRunMealTemplates : recoveryMealTemplates;
 
   if (tags.includes("withEdoardo")) {
     return baseTemplates.map((meal) =>
@@ -81,6 +94,7 @@ function selectMealTemplates(dayType: ResolvedDayType, tags: DayTag[]): MealTemp
               "Pasta SG 60-70 g da crudo con ragu magro",
               "Riso/risotto semplice con riso 60-70 g da crudo",
               "Pesce 180-220 g da crudo + patate 250-300 g da crudo",
+              "Pollo 220-250 g da crudo + patate/verdure",
             ],
           }
         : meal,
@@ -166,7 +180,11 @@ function buildSuggestions({
   const suggestions: string[] = [];
 
   if (tags.includes("travelFarNoMealPrep")) {
-    suggestions.push("Ok, oggi sei in trasferta: manteniamo il controllo senza cercare la perfezione.");
+    suggestions.push("Trasferta lontana: non cercare perfezione, punta a proteine + piatto semplice.");
+  }
+
+  if (tags.includes("travelCarMealPrep")) {
+    suggestions.push("Trasferta in auto: porta borsa frigo, acqua, protein bar GF e shaker.");
   }
 
   if (tags.includes("sundayFreeMeal")) {
@@ -174,7 +192,19 @@ function buildSuggestions({
   }
 
   if (tags.includes("ginTonic")) {
-    suggestions.push("Gin tonic registrabile senza drammi: attenzione solo a non berlo a stomaco vuoto.");
+    suggestions.push("Aperitivo/gin tonic previsto: considera circa 180 kcal per gin tonic, ma registralo solo se lo bevi davvero. Cena più semplice e proteica.");
+  }
+
+  if (tags.includes("eatingOut")) {
+    suggestions.push("Cena fuori prevista: tieni pranzo più controllato, scegli un piatto principale, parti dalle proteine e non sommare antipasto + primo + dolce.");
+  }
+
+  if (tags.includes("missedPlan")) {
+    suggestions.push("Allenamento saltato: nessun problema, mantieni proteine alte e fai una camminata breve se riesci.");
+  }
+
+  if (tags.includes("recovery")) {
+    suggestions.push("Giorno recupero: target circa 1700 kcal, proteine alte e carboidrati più controllati.");
   }
 
   if (remainingKcal <= 450) {
