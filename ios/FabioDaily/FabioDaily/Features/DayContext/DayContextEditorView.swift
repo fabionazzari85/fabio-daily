@@ -11,10 +11,13 @@ struct DayContextEditorView: View {
     @State private var selectedDate: Date
     @State private var location: DayLocation = .home
     @State private var family: DayFamily = .unset
+    @State private var breakfastOut = false
+    @State private var lunchOut = false
     @State private var dinnerOut = false
     @State private var aperitif = false
     @State private var skippedWorkout = false
     @State private var recoveryDay = false
+    @State private var travelStartsAfterLunch = false
 
     init(initialDate: Date = Date()) {
         self.initialDate = initialDate
@@ -47,6 +50,9 @@ struct DayContextEditorView: View {
                 }
 
                 Section("Extra giornata") {
+                    Toggle("Partenza dopo pranzo", isOn: $travelStartsAfterLunch)
+                    Toggle("Colazione fuori", isOn: $breakfastOut)
+                    Toggle("Pranzo fuori", isOn: $lunchOut)
                     Toggle("Cena fuori", isOn: $dinnerOut)
                     Toggle("Aperitivo / gin tonic", isOn: $aperitif)
                     Toggle("Allenamento saltato", isOn: $skippedWorkout)
@@ -95,17 +101,23 @@ struct DayContextEditorView: View {
         if let existing = existingContext {
             location = existing.location
             family = existing.family
+            breakfastOut = existing.breakfastOut
+            lunchOut = existing.lunchOut
             dinnerOut = existing.dinnerOut
             aperitif = existing.aperitif
             skippedWorkout = existing.skippedWorkout
             recoveryDay = existing.recoveryDay
+            travelStartsAfterLunch = existing.travelStartsAfterLunch
         } else {
             location = .home
             family = .unset
+            breakfastOut = false
+            lunchOut = false
             dinnerOut = false
             aperitif = false
             skippedWorkout = false
             recoveryDay = false
+            travelStartsAfterLunch = false
         }
     }
 
@@ -113,13 +125,16 @@ struct DayContextEditorView: View {
         if let existing = existingContext {
             existing.locationRaw = location.rawValue
             existing.familyRaw = family.rawValue
+            existing.breakfastOut = breakfastOut
+            existing.lunchOut = lunchOut
             existing.dinnerOut = dinnerOut
             existing.aperitif = aperitif
             existing.skippedWorkout = skippedWorkout
             existing.recoveryDay = recoveryDay
+            existing.travelStartsAfterLunch = travelStartsAfterLunch
             existing.updatedAt = Date()
         } else {
-            let flags = DayFlags(dinnerOut: dinnerOut, aperitif: aperitif, skippedWorkout: skippedWorkout, recoveryDay: recoveryDay)
+            let flags = DayFlags(breakfastOut: breakfastOut, lunchOut: lunchOut, dinnerOut: dinnerOut, aperitif: aperitif, skippedWorkout: skippedWorkout, recoveryDay: recoveryDay, travelStartsAfterLunch: travelStartsAfterLunch)
             modelContext.insert(DayContextModel(dateKey: dateKey, location: location, family: family, flags: flags))
         }
     }

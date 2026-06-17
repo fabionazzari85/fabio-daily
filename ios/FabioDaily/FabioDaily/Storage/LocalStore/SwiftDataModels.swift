@@ -304,26 +304,32 @@ final class DayContextModel {
     @Attribute(.unique) var dateKey: String
     var locationRaw: String
     var familyRaw: String
+    var breakfastOut: Bool = false
+    var lunchOut: Bool = false
     var dinnerOut: Bool
     var aperitif: Bool
     var skippedWorkout: Bool
     var recoveryDay: Bool
+    var travelStartsAfterLunch: Bool = false
     var updatedAt: Date
 
-    init(dateKey: String, location: DayLocation = .home, family: DayFamily = .unset, flags: DayFlags = DayFlags(dinnerOut: false, aperitif: false, skippedWorkout: false, recoveryDay: false)) {
+    init(dateKey: String, location: DayLocation = .home, family: DayFamily = .unset, flags: DayFlags = DayFlags()) {
         self.dateKey = dateKey
         self.locationRaw = location.rawValue
         self.familyRaw = family.rawValue
+        self.breakfastOut = flags.breakfastOut
+        self.lunchOut = flags.lunchOut
         self.dinnerOut = flags.dinnerOut
         self.aperitif = flags.aperitif
         self.skippedWorkout = flags.skippedWorkout
         self.recoveryDay = flags.recoveryDay
+        self.travelStartsAfterLunch = flags.travelStartsAfterLunch
         self.updatedAt = Date()
     }
 
     var location: DayLocation { DayLocation(rawValue: locationRaw) ?? .home }
     var family: DayFamily { DayFamily(rawValue: familyRaw) ?? .unset }
-    var flags: DayFlags { DayFlags(dinnerOut: dinnerOut, aperitif: aperitif, skippedWorkout: skippedWorkout, recoveryDay: recoveryDay) }
+    var flags: DayFlags { DayFlags(breakfastOut: breakfastOut, lunchOut: lunchOut, dinnerOut: dinnerOut, aperitif: aperitif, skippedWorkout: skippedWorkout, recoveryDay: recoveryDay, travelStartsAfterLunch: travelStartsAfterLunch) }
 }
 
 @Model

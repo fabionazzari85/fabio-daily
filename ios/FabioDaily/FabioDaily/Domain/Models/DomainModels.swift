@@ -212,10 +212,23 @@ struct MealLogDraft {
 }
 
 struct DayFlags {
+    var breakfastOut: Bool
+    var lunchOut: Bool
     var dinnerOut: Bool
     var aperitif: Bool
     var skippedWorkout: Bool
     var recoveryDay: Bool
+    var travelStartsAfterLunch: Bool
+
+    init(breakfastOut: Bool = false, lunchOut: Bool = false, dinnerOut: Bool = false, aperitif: Bool = false, skippedWorkout: Bool = false, recoveryDay: Bool = false, travelStartsAfterLunch: Bool = false) {
+        self.breakfastOut = breakfastOut
+        self.lunchOut = lunchOut
+        self.dinnerOut = dinnerOut
+        self.aperitif = aperitif
+        self.skippedWorkout = skippedWorkout
+        self.recoveryDay = recoveryDay
+        self.travelStartsAfterLunch = travelStartsAfterLunch
+    }
 }
 
 struct MealPrepItem: Identifiable {

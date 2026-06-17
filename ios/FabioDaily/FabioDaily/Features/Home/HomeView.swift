@@ -314,7 +314,10 @@ struct HomeView: View {
     private func daySummary(context: DayContextModel?, plan: TodayPlan) -> String {
         guard let context else { return "\(plan.dayLabel) · A casa" }
         var parts = [plan.dayLabel, context.location.label]
+        if context.travelStartsAfterLunch { parts.append("Partenza dopo pranzo") }
         if context.family != .unset { parts.append(context.family.label) }
+        if context.breakfastOut { parts.append("Colazione fuori") }
+        if context.lunchOut { parts.append("Pranzo fuori") }
         if context.dinnerOut { parts.append("Cena fuori") }
         if context.aperitif { parts.append("Aperitivo") }
         if context.skippedWorkout { parts.append("Allenamento saltato") }

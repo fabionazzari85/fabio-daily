@@ -2,17 +2,22 @@ import SwiftData
 import SwiftUI
 
 struct CalendarPlanningView: View {
+    @Environment(AppState.self) private var appState
     @Environment(\.modelContext) private var modelContext
     @Query private var dayContexts: [DayContextModel]
     @Query private var calendarSignals: [CalendarDaySignalModel]
+    @Query(sort: \CalendarEventImportModel.startDate) private var calendarEvents: [CalendarEventImportModel]
 
     @State private var selectedDate = Date()
     @State private var location: DayLocation = .home
     @State private var family: DayFamily = .unset
+    @State private var breakfastOut = false
+    @State private var lunchOut = false
     @State private var dinnerOut = false
     @State private var aperitif = false
     @State private var skippedWorkout = false
     @State private var recoveryDay = false
+    @State private var travelStartsAfterLunch = false
 
     var body: some View {
         NavigationStack {
@@ -32,6 +37,7 @@ struct CalendarPlanningView: View {
                     }
 
                     selectedDayCard
+                    appointmentsCard
                     editorCard
                     upcomingDaysCard
                 }
@@ -90,10 +96,17 @@ struct CalendarPlanningView: View {
                 }
                 .pickerStyle(.inline)
 
+                Toggle("Partenza dopo pranzo", isOn: $travelStartsAfterLunch)
+                Toggle("Colazione fuori", isOn: $breakfastOut)
+                Toggle("Pranzo fuori", isOn: $lunchOut)
                 Toggle("Cena fuori", isOn: $dinnerOut)
                 Toggle("Aperitivo / gin tonic", isOn: $aperitif)
                 Toggle("Allenamento saltato", isOn: $skippedWorkout)
                 Toggle("Giorno recupero", isOn: $recoveryDay)
+
+                Text("Esempio: consulenza con partenza domenica pomeriggio = Trasferta + Partenza dopo pranzo. Colazione e pranzo restano normali; metti Cena fuori se mangi fuori la sera.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
                 PrimaryButton(title: "Salva giorno") {
                     saveSelectedDay()
@@ -104,6 +117,40 @@ struct CalendarPlanningView: View {
                         resetSelectedDay()
                     }
                     .buttonStyle(.bordered)
+                }
+            }
+        }
+    }
+
+    private var appointmentsCard: some View {
+        FDCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Appuntamenti del giorno")
+                    .font(.headline)
+                SecondaryButton(title: appState.calendarService.isSyncing ? "Sincronizzazione..." : "Sincronizza Calendario") {
+                    Task { await appState.calendarService.syncNow(modelContext: modelContext) }
+                }
+                .disabled(appState.calendarService.isSyncing)
+                if selectedEvents.isEmpty {
+                    Text("Nessun appuntamento importato per questo giorno. Sincronizza il calendario da Aggiornamenti automatici se mancano eventi.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(selectedEvents) { event in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(event.title)
+                                .font(.subheadline.weight(.semibold))
+                            Text(eventTime(event))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            if let location = event.eventLocation, !location.isEmpty {
+                                Text(location)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        Divider()
+                    }
                 }
             }
         }
@@ -152,6 +199,10 @@ struct CalendarPlanningView: View {
         calendarSignals.first { $0.dateKey == selectedKey }
     }
 
+    private var selectedEvents: [CalendarEventImportModel] {
+        calendarEvents.filter { $0.dateKey == selectedKey }
+    }
+
     private var upcomingDates: [Date] {
         let calendar = Calendar.current
         return (0..<14).compactMap { calendar.date(byAdding: .day, value: $0, to: Date()) }
@@ -161,17 +212,23 @@ struct CalendarPlanningView: View {
         if let context = existingContext {
             location = context.location
             family = context.family
+            breakfastOut = context.breakfastOut
+            lunchOut = context.lunchOut
             dinnerOut = context.dinnerOut
             aperitif = context.aperitif
             skippedWorkout = context.skippedWorkout
             recoveryDay = context.recoveryDay
+            travelStartsAfterLunch = context.travelStartsAfterLunch
         } else {
             location = .home
             family = .unset
+            breakfastOut = false
+            lunchOut = false
             dinnerOut = false
             aperitif = false
             skippedWorkout = false
             recoveryDay = false
+            travelStartsAfterLunch = false
         }
     }
 
@@ -179,13 +236,16 @@ struct CalendarPlanningView: View {
         if let existing = existingContext {
             existing.locationRaw = location.rawValue
             existing.familyRaw = family.rawValue
+            existing.breakfastOut = breakfastOut
+            existing.lunchOut = lunchOut
             existing.dinnerOut = dinnerOut
             existing.aperitif = aperitif
             existing.skippedWorkout = skippedWorkout
             existing.recoveryDay = recoveryDay
+            existing.travelStartsAfterLunch = travelStartsAfterLunch
             existing.updatedAt = Date()
         } else {
-            let flags = DayFlags(dinnerOut: dinnerOut, aperitif: aperitif, skippedWorkout: skippedWorkout, recoveryDay: recoveryDay)
+            let flags = DayFlags(breakfastOut: breakfastOut, lunchOut: lunchOut, dinnerOut: dinnerOut, aperitif: aperitif, skippedWorkout: skippedWorkout, recoveryDay: recoveryDay, travelStartsAfterLunch: travelStartsAfterLunch)
             modelContext.insert(DayContextModel(dateKey: selectedKey, location: location, family: family, flags: flags))
         }
     }
@@ -210,11 +270,19 @@ struct CalendarPlanningView: View {
 
     private func summary(for context: DayContextModel) -> String {
         var parts = [context.location.label]
+        if context.travelStartsAfterLunch { parts.append("Partenza dopo pranzo") }
         if context.family != .unset { parts.append(context.family.label) }
+        if context.breakfastOut { parts.append("Colazione fuori") }
+        if context.lunchOut { parts.append("Pranzo fuori") }
         if context.dinnerOut { parts.append("Cena fuori") }
         if context.aperitif { parts.append("Aperitivo") }
         if context.skippedWorkout { parts.append("Workout saltato") }
         if context.recoveryDay { parts.append("Recupero") }
         return parts.joined(separator: " · ")
+    }
+
+    private func eventTime(_ event: CalendarEventImportModel) -> String {
+        if event.isAllDay { return "Tutto il giorno" }
+        return "\(event.startDate.formatted(date: .omitted, time: .shortened))-\(event.endDate.formatted(date: .omitted, time: .shortened))"
     }
 }

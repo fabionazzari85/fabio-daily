@@ -50,11 +50,20 @@ final class CalendarService {
 
         do {
             let today = Date()
-            let events = try importEvents(for: today, calendars: calendars, modelContext: modelContext)
-            let signal = makeSignal(for: today, events: events)
-            upsertSignal(signal, modelContext: modelContext)
-            upsertStatus(events.isEmpty ? .noEvents : .active, modelContext: modelContext, eventsReadToday: events.count)
-            lastMessage = events.isEmpty ? "Nessun evento utile letto oggi." : "Calendario sincronizzato."
+            var todayEventsCount = 0
+            var importedEventsCount = 0
+
+            for dayOffset in 0..<14 {
+                guard let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: today) else { continue }
+                let events = try importEvents(for: date, calendars: calendars, modelContext: modelContext)
+                let signal = makeSignal(for: date, events: events)
+                upsertSignal(signal, modelContext: modelContext)
+                importedEventsCount += events.count
+                if dayOffset == 0 { todayEventsCount = events.count }
+            }
+
+            upsertStatus(importedEventsCount == 0 ? .noEvents : .active, modelContext: modelContext, eventsReadToday: todayEventsCount)
+            lastMessage = importedEventsCount == 0 ? "Nessun evento utile letto nei prossimi 14 giorni." : "Calendario sincronizzato per i prossimi 14 giorni."
         } catch {
             upsertStatus(.error, modelContext: modelContext, error: error.localizedDescription)
             lastMessage = error.localizedDescription

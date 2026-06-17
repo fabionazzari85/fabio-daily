@@ -47,16 +47,57 @@ enum PlanningEngine {
                 dinnerOut: signal.dinnerOutLikely,
                 aperitif: false,
                 skippedWorkout: false,
-                recoveryDay: false
+                recoveryDay: false,
+                travelStartsAfterLunch: false
             )
         )
     }
 
     private static func meals(for context: DayContextModel) -> [MealTemplate] {
-        if context.location == .carTravel { return SeedData.carTravelMeals }
-        if context.location == .farTravel { return SeedData.farTravelMeals }
-        if context.recoveryDay { return SeedData.recoveryMeals }
-        return SeedData.homeWorkoutMeals
+        let homeMeals = context.recoveryDay ? SeedData.recoveryMeals : SeedData.homeWorkoutMeals
+        let travelMeals: [MealTemplate]? = {
+            if context.location == .carTravel { return SeedData.carTravelMeals }
+            if context.location == .farTravel { return SeedData.farTravelMeals }
+            return nil
+        }()
+
+        let baseMeals: [MealTemplate]
+        if let travelMeals, !context.travelStartsAfterLunch {
+            baseMeals = travelMeals
+        } else {
+            baseMeals = homeMeals
+        }
+
+        return baseMeals.map { meal in
+            if context.breakfastOut && meal.slot == .breakfast {
+                return outsideMeal(for: .breakfast, fallback: meal)
+            }
+            if context.lunchOut && meal.slot == .lunch {
+                return outsideMeal(for: .lunch, fallback: meal)
+            }
+            if context.dinnerOut && meal.slot == .dinner {
+                return outsideMeal(for: .dinner, fallback: meal)
+            }
+            if context.travelStartsAfterLunch,
+               let travelMeal = travelMeals?.first(where: { $0.slot == meal.slot }),
+               meal.slot == .snack || meal.slot == .dinner {
+                return travelMeal
+            }
+            return meal
+        }
+    }
+
+    private static func outsideMeal(for slot: MealSlot, fallback: MealTemplate) -> MealTemplate {
+        switch slot {
+        case .breakfast:
+            return MealTemplate(id: "outside-breakfast", slot: .breakfast, title: "Colazione fuori controllata", description: "Bar/hotel: yogurt o cappuccino + frutta; se proteine basse, barretta GF o shaker. Evita brioche/pasticceria come base.", macros: MacroValue(kcal: 380, proteinG: 28, carbsG: 42, fatG: 10), alternatives: ["Skyr se disponibile", "Barretta GF + frutto"])
+        case .lunch:
+            return MealTemplate(id: "outside-lunch", slot: .lunch, title: "Pranzo fuori controllato", description: "Piatto leggibile senza glutine: proteina + riso/patate/insalata, oppure poke GF. Parti dalle proteine e registra quello che scegli.", macros: MacroValue(kcal: 620, proteinG: 40, carbsG: 70, fatG: 18), alternatives: ["Poke GF", "Secondo + patate/riso", "Supermercato: proteina + carbo semplice"])
+        case .dinner:
+            return MealTemplate(id: "outside-dinner", slot: .dinner, title: "Cena fuori: un piatto solo", description: "Ristorante: proteine + contorno + carboidrato semplice se serve. Non sommare antipasto + primo + dolce.", macros: MacroValue(kcal: 700, proteinG: 45, carbsG: 70, fatG: 24), alternatives: ["Pesce + patate", "Tagliata + contorno", "Pasta SG se porzione chiara"])
+        default:
+            return fallback
+        }
     }
 
     private static func applyFamilyRules(_ meals: [MealTemplate], context: DayContextModel) -> [MealTemplate] {
@@ -124,6 +165,9 @@ enum PlanningEngine {
         }
         if context.location == .carTravel { result.append("Porta borsa frigo, acqua, protein bar GF e shaker.") }
         if context.location == .farTravel { result.append("Non cercare perfezione: punta a proteine + piatto semplice.") }
+        if context.travelStartsAfterLunch { result.append("Partenza dopo pranzo: colazione e pranzo restano normali, prepara soprattutto kit pomeriggio/cena.") }
+        if context.breakfastOut { result.append("Colazione fuori prevista: cerca proteine semplici e una fonte carbo controllata, senza glutine.") }
+        if context.lunchOut { result.append("Pranzo fuori previsto: scegli un piatto leggibile e registra una stima realistica.") }
         if context.dinnerOut { result.append("Cena fuori prevista: scegli un piatto principale, parti dalle proteine e non sommare antipasto + primo + dolce.") }
         if context.aperitif { result.append("Aperitivo/gin tonic previsto: considera circa 180 kcal, ma registralo solo se lo bevi davvero.") }
         if context.skippedWorkout { result.append("Allenamento saltato: nessun tono punitivo. Mantieni proteine alte e fai una camminata breve se possibile.") }
