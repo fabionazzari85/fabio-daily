@@ -54,6 +54,11 @@ struct AutomaticUpdatesCard: View {
                         .font(.caption)
                         .foregroundStyle(.red)
                 }
+                if let message = healthKitService.lastMessage, !message.isEmpty {
+                    Text(message)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
 
                 PrimaryButton(title: "Collega Apple Health") {
                     Task { await healthKitService.requestAuthorization(modelContext: modelContext) }

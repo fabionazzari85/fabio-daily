@@ -36,6 +36,7 @@ final class HealthKitService {
             try await healthStore.requestAuthorization(toShare: [], read: readTypes)
             upsertStatus(.active, modelContext: modelContext)
             lastMessage = "Apple Health collegato."
+            await syncNow(modelContext: modelContext)
         } catch {
             upsertStatus(.error, modelContext: modelContext, error: error.localizedDescription)
             lastMessage = error.localizedDescription
@@ -55,28 +56,32 @@ final class HealthKitService {
             let today = Date()
             try await syncDailyActivity(for: today, modelContext: modelContext)
             try await syncWorkouts(since: Calendar.current.date(byAdding: .day, value: -7, to: today) ?? today, modelContext: modelContext)
-            try await syncBodyWeightFromHealth(since: Calendar.current.date(byAdding: .day, value: -30, to: today) ?? today, modelContext: modelContext)
+            let bodyWeightResult = try await syncBodyWeightFromHealth(since: Calendar.current.date(byAdding: .month, value: -24, to: today) ?? today, modelContext: modelContext)
             upsertStatus(.active, modelContext: modelContext)
-            lastMessage = "Sincronizzazione completata."
+            if bodyWeightResult.samplesFound == 0 {
+                lastMessage = "Sync completata. Nessun peso trovato in Apple Health negli ultimi 24 mesi: controlla che Peso sia autorizzato in Salute."
+            } else if bodyWeightResult.inserted == 0 {
+                lastMessage = "Sync completata. Peso Apple Health già presente, nessun duplicato aggiunto."
+            } else {
+                lastMessage = "Sync completata. Importati \(bodyWeightResult.inserted) pesi da Apple Health."
+            }
         } catch {
             upsertStatus(.error, modelContext: modelContext, error: error.localizedDescription)
             lastMessage = error.localizedDescription
         }
     }
 
-    func syncBodyWeightFromHealth(since startDate: Date, modelContext: ModelContext) async throws {
-        guard let bodyMassType = HKObjectType.quantityType(forIdentifier: .bodyMass) else { return }
+    func syncBodyWeightFromHealth(since startDate: Date, modelContext: ModelContext) async throws -> BodyWeightImportResult {
+        guard let bodyMassType = HKObjectType.quantityType(forIdentifier: .bodyMass) else {
+            return BodyWeightImportResult(samplesFound: 0, inserted: 0)
+        }
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: [])
         let sort = SortDescriptor(\HKQuantitySample.startDate, order: .reverse)
         let descriptor = HKSampleQueryDescriptor(predicates: [.quantitySample(type: bodyMassType, predicate: predicate)], sortDescriptors: [sort], limit: HKObjectQueryNoLimit)
         let samples = try await descriptor.result(for: healthStore)
 
-        if samples.isEmpty {
-            upsertStatus(.noData, modelContext: modelContext)
-            return
-        }
-
-        let existingWeights = fetchWeights(modelContext)
+        var knownWeights = fetchWeights(modelContext)
+        var inserted = 0
 
         for sample in samples {
             let uuid = sample.uuid.uuidString
@@ -84,14 +89,14 @@ final class HealthKitService {
             let sourceName = sample.sourceRevision.source.name
             let sourceBundleId = sample.sourceRevision.source.bundleIdentifier
 
-            if existingWeights.contains(where: { $0.healthKitUUID == uuid }) { continue }
-            if existingWeights.contains(where: { abs($0.measuredAt.timeIntervalSince(sample.startDate)) < 1 && abs($0.weightKg - weightKg) < 0.05 && $0.sourceName == sourceName }) { continue }
+            if knownWeights.contains(where: { $0.healthKitUUID == uuid }) { continue }
+            if knownWeights.contains(where: { abs($0.measuredAt.timeIntervalSince(sample.startDate)) < 1 && abs($0.weightKg - weightKg) < 0.05 && $0.sourceName == sourceName }) { continue }
 
             let source = sourceName.localizedCaseInsensitiveContains("withings") || sourceBundleId.localizedCaseInsensitiveContains("withings")
                 ? ImportedDataSource.withingsViaAppleHealth
                 : ImportedDataSource.appleHealth
 
-            modelContext.insert(WeightEntryModel(
+            let entry = WeightEntryModel(
                 id: "health-\(uuid)",
                 dateKey: DateKeys.dayKey(sample.startDate),
                 measuredAt: sample.startDate,
@@ -101,8 +106,13 @@ final class HealthKitService {
                 sourceName: sourceName,
                 sourceBundleId: sourceBundleId,
                 healthKitUUID: uuid
-            ))
+            )
+            modelContext.insert(entry)
+            knownWeights.append(entry)
+            inserted += 1
         }
+
+        return BodyWeightImportResult(samplesFound: samples.count, inserted: inserted)
     }
 
     private func syncWorkouts(since startDate: Date, modelContext: ModelContext) async throws {
@@ -187,6 +197,11 @@ final class HealthKitService {
     private func fetchSyncStatuses(_ modelContext: ModelContext) -> [HealthSyncStatusModel] {
         (try? modelContext.fetch(FetchDescriptor<HealthSyncStatusModel>())) ?? []
     }
+}
+
+struct BodyWeightImportResult {
+    let samplesFound: Int
+    let inserted: Int
 }
 
 private extension HKWorkoutActivityType {

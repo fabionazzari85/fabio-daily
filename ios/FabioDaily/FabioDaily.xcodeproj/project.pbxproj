@@ -58,9 +58,6 @@
 		BF00000200000000000000FF /* FabioDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabioDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		BF0000030000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -152,66 +149,6 @@
 				BF0000020000000000000004 /* SwiftDataModels.swift */,
 			);
 			path = LocalStore;
-			sourceTree = "<group>";
-		};
-		BF0000040000000000000019 /* Repositories */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000020000000000000011 /* LocalRepositories.swift */,
-			);
-			path = Repositories;
-			sourceTree = "<group>";
-		};
-		BF0000040000000000000015 /* Integrations */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000040000000000000016 /* HealthKitPlaceholder */,
-				BF000004000000000000001A /* HealthKit */,
-				BF000004000000000000001B /* Calendar */,
-				BF0000040000000000000017 /* CalendarPlaceholder */,
-				BF0000040000000000000018 /* WithingsPlaceholder */,
-			);
-			path = Integrations;
-			sourceTree = "<group>";
-		};
-		BF0000040000000000000016 /* HealthKitPlaceholder */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000020000000000000012 /* HealthKitPlaceholder.swift */,
-			);
-			path = HealthKitPlaceholder;
-			sourceTree = "<group>";
-		};
-		BF000004000000000000001A /* HealthKit */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000020000000000000015 /* HealthKitService.swift */,
-			);
-			path = HealthKit;
-			sourceTree = "<group>";
-		};
-		BF000004000000000000001B /* Calendar */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000020000000000000017 /* CalendarService.swift */,
-			);
-			path = Calendar;
-			sourceTree = "<group>";
-		};
-		BF0000040000000000000017 /* CalendarPlaceholder */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000020000000000000013 /* CalendarPlaceholder.swift */,
-			);
-			path = CalendarPlaceholder;
-			sourceTree = "<group>";
-		};
-		BF0000040000000000000018 /* WithingsPlaceholder */ = {
-			isa = PBXGroup;
-			children = (
-				BF0000020000000000000014 /* WithingsPlaceholder.swift */,
-			);
-			path = WithingsPlaceholder;
 			sourceTree = "<group>";
 		};
 		BF000004000000000000000A /* DesignSystem */ = {
@@ -308,6 +245,66 @@
 				BF0000020000000000000010 /* ProfileView.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000015 /* Integrations */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000040000000000000016 /* HealthKitPlaceholder */,
+				BF000004000000000000001A /* HealthKit */,
+				BF000004000000000000001B /* Calendar */,
+				BF0000040000000000000017 /* CalendarPlaceholder */,
+				BF0000040000000000000018 /* WithingsPlaceholder */,
+			);
+			path = Integrations;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000016 /* HealthKitPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000012 /* HealthKitPlaceholder.swift */,
+			);
+			path = HealthKitPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000017 /* CalendarPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000013 /* CalendarPlaceholder.swift */,
+			);
+			path = CalendarPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000018 /* WithingsPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000014 /* WithingsPlaceholder.swift */,
+			);
+			path = WithingsPlaceholder;
+			sourceTree = "<group>";
+		};
+		BF0000040000000000000019 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000011 /* LocalRepositories.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000001A /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000015 /* HealthKitService.swift */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000001B /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000017 /* CalendarService.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		BF00000400000000000000FF /* Products */ = {
@@ -539,7 +536,7 @@
 				CODE_SIGN_ENTITLEMENTS = FabioDaily/FabioDaily.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = ZPM7238LFP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
@@ -571,7 +568,7 @@
 				CODE_SIGN_ENTITLEMENTS = FabioDaily/FabioDaily.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = ZPM7238LFP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fabio Daily";
