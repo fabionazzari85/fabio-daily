@@ -1,5 +1,6 @@
 import { AlertTriangle, CalendarDays, Dumbbell, Flame, Pencil, PlusCircle, Scale, ShoppingBasket, Trash2, User, Utensils } from "lucide-react";
 import { mealLogCategoryOptions, mealSlotOptions } from "@/data/mealLogOptions";
+import { rawWeightNote } from "@/data/mealPrepTemplates";
 import type { MealLog, MealLogCategory, MealLogDraft, MealSlot, MealTemplate, TodayPlan, WeightEntry } from "@/domain/types";
 import { calculateWeightTrend } from "@/logic/calculateWeightTrend";
 import { formatItalianDate } from "@/logic/date";
@@ -87,6 +88,7 @@ export function HomeDashboard({
               <h2 className="text-xl font-bold">Pasti di oggi</h2>
             </div>
             <p className="mt-1 text-sm leading-relaxed text-muted">Cosa mangiare oggi. Meal Prep resta solo per preparare freezer e spesa.</p>
+            <p className="mt-2 text-sm font-bold leading-relaxed text-accent-strong">{rawWeightNote}</p>
           </div>
           <span className="shrink-0 rounded-lg bg-accent-soft px-2 py-1 text-sm font-bold text-accent-strong">{plan.plannedMeals.length}</span>
         </div>

@@ -76,11 +76,11 @@ function selectMealTemplates(dayType: ResolvedDayType, tags: DayTag[]): MealTemp
         ? {
             ...meal,
             title: "Cena familiare semplice",
-            description: "Piatto condivisibile: pasta GF 60-70 g da crudo con ragu magro, riso 60-70 g da crudo o pesce + patate 250-300 g peso crudo.",
+            description: "Piatto condivisibile: pasta GF 60-70 g da crudo con ragu magro da circa 180-220 g carne cruda, riso 60-70 g da crudo o pesce 180-220 g da crudo + patate 250-300 g da crudo.",
             alternatives: [
               "Pasta SG 60-70 g da crudo con ragu magro",
               "Riso/risotto semplice con riso 60-70 g da crudo",
-              "Pesce + patate 250-300 g peso crudo",
+              "Pesce 180-220 g da crudo + patate 250-300 g da crudo",
             ],
           }
         : meal,
@@ -93,9 +93,9 @@ function selectMealTemplates(dayType: ResolvedDayType, tags: DayTag[]): MealTemp
         ? {
             ...meal,
             title: "Cena freezer controllata",
-            description: "Cena freezer automatica o molto semplice: patate 250-300 g peso crudo oppure riso/pasta SG 60-70 g da crudo, porzione per Fabio.",
+            description: "Cena freezer automatica o molto semplice: proteina batch da crudo gia porzionata + patate 250-300 g da crudo oppure riso/pasta SG 60-70 g da crudo, porzione per Fabio.",
             alternatives: [
-              "Polpette tacchino + patate 250-300 g peso crudo + zucchine",
+              "Polpette tacchino da 220-250 g macinato crudo + patate 250-300 g da crudo + zucchine",
               "Ragu magro + riso/pasta SG 60-70 g da crudo",
               "Pollo al curry leggero + riso 60 g da crudo",
             ],

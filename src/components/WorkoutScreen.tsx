@@ -76,6 +76,10 @@ export function WorkoutScreen({ date, workoutPlan, workoutLog, onSave, onDelete 
           {workoutPlan.durationMin.max > 0 ? `${workoutPlan.durationMin.min}-${workoutPlan.durationMin.max} min` : "Recupero"} · Fonte consigliata:{" "}
           {workoutPlan.sourceHint}
         </p>
+        <p className="mt-3 rounded-lg bg-background p-3 text-sm leading-relaxed text-muted">
+          MVP PWA: workout inserito manualmente. Versione iOS futura: import automatico da Apple Health / Apple Watch per workout completati,
+          camminata/corsa, durata, calorie attive e passi.
+        </p>
       </section>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -137,6 +141,7 @@ export function WorkoutScreen({ date, workoutPlan, workoutLog, onSave, onDelete 
 
         <section className="rounded-lg border border-accent-soft bg-accent-soft p-4 text-sm leading-relaxed text-accent-strong">
           <p className="font-bold">Le calorie attività sono un indicatore, non un bonus automatico da rimangiare.</p>
+          <p className="mt-2">Apple Health / Apple Watch: planned / not active.</p>
           {isIntense ? <p className="mt-2">Se hai fame vera o calo energetico, valuta uno spuntino proteico controllato.</p> : null}
         </section>
 

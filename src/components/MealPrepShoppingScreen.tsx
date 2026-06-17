@@ -2,7 +2,19 @@
 
 import { Plus, RotateCcw, ShoppingBasket, Snowflake } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { freezerDinners, freezerLunches, mealPrepReminder } from "@/data/mealPrepTemplates";
+import {
+  dinnerPortionExamples,
+  dinnerProteinBatch,
+  dinnerSideBatch,
+  lunchCarbBatch,
+  lunchPortionExamples,
+  lunchProteinBatch,
+  lunchVegetableBatch,
+  mealPrepReminder,
+  rawWeightNote,
+  sharedSideBatch,
+  sharedSidesNote,
+} from "@/data/mealPrepTemplates";
 import { shoppingListTemplate } from "@/data/shoppingListTemplate";
 import type { MealPrepItem, MealPrepState, ShoppingListCategory } from "@/domain/types";
 import { browserLocalRepository } from "@/storage/browserLocalRepository";
@@ -10,6 +22,8 @@ import { browserLocalRepository } from "@/storage/browserLocalRepository";
 type MealPrepShoppingScreenProps = {
   weekId: string;
 };
+
+type MealPrepSectionKey = Exclude<keyof MealPrepState, "weekId">;
 
 export function MealPrepShoppingScreen({ weekId }: MealPrepShoppingScreenProps) {
   const [mealPrepState, setMealPrepState] = useState<MealPrepState>(() => createMealPrepState(weekId));
@@ -19,9 +33,10 @@ export function MealPrepShoppingScreen({ weekId }: MealPrepShoppingScreenProps) 
   const [loaded, setLoaded] = useState(false);
 
   const preparedCount = useMemo(
-    () => [...mealPrepState.lunches, ...mealPrepState.dinners].filter((item) => item.prepared).length,
+    () => mealPrepSections(mealPrepState).filter((item) => item.prepared).length,
     [mealPrepState],
   );
+  const prepTotal = useMemo(() => mealPrepSections(mealPrepState).length, [mealPrepState]);
   const shoppingCount = useMemo(
     () => shoppingList.reduce((total, category) => total + category.items.filter((item) => item.checked).length, 0),
     [shoppingList],
@@ -37,7 +52,7 @@ export function MealPrepShoppingScreen({ weekId }: MealPrepShoppingScreenProps) 
       ]);
 
       if (!cancelled) {
-        setMealPrepState(storedMealPrep ?? createMealPrepState(weekId));
+        setMealPrepState(normalizeMealPrepState(weekId, storedMealPrep));
         setShoppingList(storedShoppingList ?? cloneShoppingTemplate());
         setLoaded(true);
       }
@@ -50,7 +65,7 @@ export function MealPrepShoppingScreen({ weekId }: MealPrepShoppingScreenProps) 
     };
   }, [weekId]);
 
-  async function toggleMealPrepItem(type: "lunches" | "dinners", id: string) {
+  async function toggleMealPrepItem(type: MealPrepSectionKey, id: string) {
     const nextState = {
       ...mealPrepState,
       [type]: mealPrepState[type].map((item) => (item.id === id ? { ...item, prepared: !item.prepared } : item)),
@@ -124,26 +139,47 @@ export function MealPrepShoppingScreen({ weekId }: MealPrepShoppingScreenProps) 
           <div>
             <h2 className="text-base font-bold text-accent-strong">{mealPrepReminder}</h2>
             <p className="mt-1 text-sm leading-relaxed text-accent-strong">
-              Preparati: {preparedCount}/9 · Spesa: {shoppingCount} item comprati
+              Basi/porzioni: {preparedCount}/{prepTotal} · Spesa: {shoppingCount} item comprati
             </p>
+            <p className="mt-2 text-sm font-bold leading-relaxed text-accent-strong">{rawWeightNote}</p>
           </div>
         </div>
       </section>
 
-      <details open className="mb-4 rounded-lg border border-border bg-surface p-4 shadow-sm">
-        <summary className="cursor-pointer list-none text-xl font-bold">Pranzi freezer</summary>
-        <div className="mt-4 space-y-3">
-          {mealPrepState.lunches.map((item) => (
-            <MealPrepChecklistItem key={item.id} item={item} label="Preparato" onToggle={() => toggleMealPrepItem("lunches", item.id)} />
-          ))}
-        </div>
-      </details>
+      <section className="mb-4 rounded-lg border border-border bg-surface p-4 shadow-sm">
+        <h2 className="text-xl font-bold">Metodo batch</h2>
+        <p className="mt-2 text-sm leading-relaxed text-muted">Prepara basi batch, combina porzioni, congela o usa durante la settimana.</p>
+      </section>
+
+      <BatchSection
+        title="Pranzi freezer"
+        subtitle="Basi preparate"
+        groups={[
+          { title: "Proteine per pranzi", key: "lunchProteins", items: mealPrepState.lunchProteins, label: "Preparato" },
+          { title: "Carboidrati per pranzi", key: "lunchCarbs", items: mealPrepState.lunchCarbs, label: "Preparato" },
+          { title: "Verdure batch per pranzi", key: "lunchVegetables", items: mealPrepState.lunchVegetables, label: "Preparato" },
+          { title: "Porzioni assemblate", key: "lunchPortions", items: mealPrepState.lunchPortions, label: "Porzione pronta" },
+        ]}
+        onToggle={toggleMealPrepItem}
+      />
+
+      <BatchSection
+        title="Cene freezer"
+        subtitle="Basi da 4-5 porzioni, non 4 cene singole diverse"
+        groups={[
+          { title: "Proteine per cene emergenza", key: "dinnerProteins", items: mealPrepState.dinnerProteins, label: "Preparata" },
+          { title: "Contorni e carboidrati batch cena", key: "dinnerSides", items: mealPrepState.dinnerSides, label: "Preparato" },
+          { title: "Esempi combinazioni cena", key: "dinnerPortions", items: mealPrepState.dinnerPortions, label: "Porzione pronta" },
+        ]}
+        onToggle={toggleMealPrepItem}
+      />
 
       <details open className="mb-4 rounded-lg border border-border bg-surface p-4 shadow-sm">
-        <summary className="cursor-pointer list-none text-xl font-bold">Cene freezer</summary>
+        <summary className="cursor-pointer list-none text-xl font-bold">Contorni batch intercambiabili</summary>
+        <p className="mt-3 text-sm leading-relaxed text-muted">{sharedSidesNote}</p>
         <div className="mt-4 space-y-3">
-          {mealPrepState.dinners.map((item) => (
-            <MealPrepChecklistItem key={item.id} item={item} label="Preparata" onToggle={() => toggleMealPrepItem("dinners", item.id)} />
+          {mealPrepState.sharedSides.map((item) => (
+            <MealPrepChecklistItem key={item.id} item={item} label="Preparato" onToggle={() => toggleMealPrepItem("sharedSides", item.id)} />
           ))}
         </div>
       </details>
@@ -246,16 +282,84 @@ function MealPrepChecklistItem({ item, label, onToggle }: { item: MealPrepItem; 
   );
 }
 
+function BatchSection({
+  title,
+  subtitle,
+  groups,
+  onToggle,
+}: {
+  title: string;
+  subtitle: string;
+  groups: Array<{ title: string; key: MealPrepSectionKey; items: MealPrepItem[]; label: string }>;
+  onToggle: (type: MealPrepSectionKey, id: string) => void;
+}) {
+  return (
+    <details open className="mb-4 rounded-lg border border-border bg-surface p-4 shadow-sm">
+      <summary className="cursor-pointer list-none">
+        <div className="text-xl font-bold">{title}</div>
+        <div className="mt-1 text-sm text-muted">{subtitle}</div>
+      </summary>
+      <div className="mt-4 space-y-4">
+        {groups.map((group) => (
+          <section key={group.key} className="rounded-lg bg-background p-3">
+            <h3 className="text-base font-bold">{group.title}</h3>
+            <div className="mt-3 space-y-3">
+              {group.items.map((item) => (
+                <MealPrepChecklistItem key={item.id} item={item} label={group.label} onToggle={() => onToggle(group.key, item.id)} />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 function createMealPrepState(weekId: string): MealPrepState {
   return {
     weekId,
-    lunches: cloneMealPrepItems(freezerLunches),
-    dinners: cloneMealPrepItems(freezerDinners),
+    lunchProteins: cloneMealPrepItems(lunchProteinBatch),
+    lunchCarbs: cloneMealPrepItems(lunchCarbBatch),
+    lunchVegetables: cloneMealPrepItems(lunchVegetableBatch),
+    lunchPortions: cloneMealPrepItems(lunchPortionExamples),
+    dinnerProteins: cloneMealPrepItems(dinnerProteinBatch),
+    dinnerSides: cloneMealPrepItems(dinnerSideBatch),
+    dinnerPortions: cloneMealPrepItems(dinnerPortionExamples),
+    sharedSides: cloneMealPrepItems(sharedSideBatch),
   };
+}
+
+function normalizeMealPrepState(weekId: string, storedState: MealPrepState | null): MealPrepState {
+  const nextState = createMealPrepState(weekId);
+  if (!storedState) return nextState;
+
+  mealPrepSectionKeys.forEach((key) => {
+    nextState[key] = nextState[key].map((item) => {
+      const storedItem = storedState[key]?.find((candidate) => candidate.id === item.id);
+      return storedItem ? { ...item, prepared: storedItem.prepared } : item;
+    });
+  });
+
+  return nextState;
 }
 
 function cloneMealPrepItems(items: MealPrepItem[]) {
   return items.map((item) => ({ ...item, ingredients: [...item.ingredients], prepared: false }));
+}
+
+const mealPrepSectionKeys: MealPrepSectionKey[] = [
+  "lunchProteins",
+  "lunchCarbs",
+  "lunchVegetables",
+  "lunchPortions",
+  "dinnerProteins",
+  "dinnerSides",
+  "dinnerPortions",
+  "sharedSides",
+];
+
+function mealPrepSections(state: MealPrepState) {
+  return mealPrepSectionKeys.flatMap((key) => state[key]);
 }
 
 function cloneShoppingTemplate() {

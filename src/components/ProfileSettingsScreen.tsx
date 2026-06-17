@@ -1,6 +1,7 @@
 "use client";
 
 import { HeartPulse, ShieldCheck, User } from "lucide-react";
+import { rawWeightNote } from "@/data/mealPrepTemplates";
 import { nutritionTargets } from "@/data/nutritionTargets";
 import type { UserProfile } from "@/domain/types";
 
@@ -9,9 +10,9 @@ type ProfileSettingsScreenProps = {
 };
 
 const futureIntegrations = [
-  "Apple Health: non attivo",
-  "Apple Watch: non attivo",
-  "Withings: non attivo",
+  "Apple Health: planned / not active",
+  "Apple Watch: planned / not active",
+  "Withings: planned / not active",
   "Calendario personale: non attivo",
   "Foto-pasto AI: non attivo",
   "Notifiche: non attive",
@@ -68,6 +69,10 @@ export function ProfileSettingsScreen({ profile }: ProfileSettingsScreenProps) {
             "No pomodori crudi",
             "Cena abbondante = possibile trigger reflusso",
             "Proteine prima, poi verdure, poi carboidrati",
+            rawWeightNote,
+            "Carne, pollo, tacchino, pesce, riso, quinoa, grano saraceno, pasta e patate: usa peso da crudo.",
+            "Legumi in barattolo: peso cotto/scolato perche gia cotti.",
+            "Tonno/salmone in busta: peso sgocciolato/confezione perche gia pronto.",
             ...profile.sleeveRefluxRules,
           ]}
         />
@@ -108,8 +113,12 @@ export function ProfileSettingsScreen({ profile }: ProfileSettingsScreenProps) {
           items={[
             "Workout guidati casa: Apple Fitness+",
             "Corsa/camminata: Apple Watch",
-            "Dati attività futuri: Apple Health",
+            "Dati attivita futuri: Apple Health",
             "Peso futuro: Withings / Apple Health",
+            "MVP PWA: workout inserito manualmente.",
+            "Versione iOS futura: import automatico da Apple Health / Apple Watch.",
+            "Dati futuri: workout completati, camminata/corsa, durata, calorie attive, passi.",
+            "Le calorie attivita non saranno aggiunte automaticamente al budget alimentare.",
           ]}
         />
         <p className="mt-3 rounded-lg bg-background p-3 text-sm leading-relaxed text-muted">

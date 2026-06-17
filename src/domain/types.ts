@@ -186,8 +186,14 @@ export type MealPrepItem = {
 
 export type MealPrepState = {
   weekId: string;
-  lunches: MealPrepItem[];
-  dinners: MealPrepItem[];
+  lunchProteins: MealPrepItem[];
+  lunchCarbs: MealPrepItem[];
+  lunchVegetables: MealPrepItem[];
+  lunchPortions: MealPrepItem[];
+  dinnerProteins: MealPrepItem[];
+  dinnerSides: MealPrepItem[];
+  dinnerPortions: MealPrepItem[];
+  sharedSides: MealPrepItem[];
 };
 
 export type TodayPlan = {
