@@ -2,10 +2,13 @@ import SwiftData
 import SwiftUI
 
 struct DayContextEditorView: View {
+    let initialDate: Date
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query private var dayContexts: [DayContextModel]
 
+    @State private var selectedDate: Date
     @State private var location: DayLocation = .home
     @State private var family: DayFamily = .unset
     @State private var dinnerOut = false
@@ -13,11 +16,22 @@ struct DayContextEditorView: View {
     @State private var skippedWorkout = false
     @State private var recoveryDay = false
 
-    private let dateKey = DateKeys.dayKey(Date())
+    init(initialDate: Date = Date()) {
+        self.initialDate = initialDate
+        _selectedDate = State(initialValue: initialDate)
+    }
 
     var body: some View {
         NavigationStack {
             Form {
+                Section("Giorno") {
+                    DatePicker("Data", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(.compact)
+                    Text(selectedDate.formatted(date: .complete, time: .omitted))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Luogo / situazione") {
                     Picker("Luogo", selection: $location) {
                         ForEach(DayLocation.allCases) { Text($0.label).tag($0) }
@@ -65,7 +79,12 @@ struct DayContextEditorView: View {
                 }
             }
             .onAppear(perform: load)
+            .onChange(of: selectedDate) { _, _ in load() }
         }
+    }
+
+    private var dateKey: String {
+        DateKeys.dayKey(selectedDate)
     }
 
     private var existingContext: DayContextModel? {
@@ -73,13 +92,21 @@ struct DayContextEditorView: View {
     }
 
     private func load() {
-        guard let existing = existingContext else { return }
-        location = existing.location
-        family = existing.family
-        dinnerOut = existing.dinnerOut
-        aperitif = existing.aperitif
-        skippedWorkout = existing.skippedWorkout
-        recoveryDay = existing.recoveryDay
+        if let existing = existingContext {
+            location = existing.location
+            family = existing.family
+            dinnerOut = existing.dinnerOut
+            aperitif = existing.aperitif
+            skippedWorkout = existing.skippedWorkout
+            recoveryDay = existing.recoveryDay
+        } else {
+            location = .home
+            family = .unset
+            dinnerOut = false
+            aperitif = false
+            skippedWorkout = false
+            recoveryDay = false
+        }
     }
 
     private func save() {

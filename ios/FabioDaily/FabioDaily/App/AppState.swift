@@ -4,6 +4,7 @@ import SwiftUI
 enum AppTab: String, CaseIterable {
     case home = "Home"
     case log = "Log"
+    case calendar = "Calendario"
     case prep = "Prep"
     case workout = "Workout"
     case measurements = "Peso"
@@ -17,8 +18,14 @@ final class AppState {
     var mealDraft: MealLogDraft?
     var editingMealLog: MealLogModel?
     var showingDayContextEditor = false
+    var dayContextEditorDate = Date()
     var healthKitService = HealthKitService()
     var calendarService = CalendarService()
+
+    func editDayContext(date: Date = Date()) {
+        dayContextEditorDate = date
+        showingDayContextEditor = true
+    }
 
     func startMealLog(_ draft: MealLogDraft?) {
         mealDraft = draft

@@ -18,6 +18,10 @@ struct FabioRootView: View {
                 .tabItem { Label("Log", systemImage: "plus.circle") }
                 .tag(AppTab.log)
 
+            CalendarPlanningView()
+                .tabItem { Label("Cal", systemImage: "calendar") }
+                .tag(AppTab.calendar)
+
             MealPrepView()
                 .tabItem { Label("Prep", systemImage: "basket") }
                 .tag(AppTab.prep)
@@ -36,7 +40,7 @@ struct FabioRootView: View {
         }
         .environment(appState)
         .sheet(isPresented: $appState.showingDayContextEditor) {
-            DayContextEditorView()
+            DayContextEditorView(initialDate: appState.dayContextEditorDate)
         }
         .task {
             await syncAppleHealthOnOpenIfNeeded()

@@ -29,6 +29,7 @@
 		BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000014 /* WithingsPlaceholder.swift */; };
 		BF0000010000000000000015 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000015 /* HealthKitService.swift */; };
 		BF0000010000000000000016 /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000017 /* CalendarService.swift */; };
+		BF0000010000000000000017 /* CalendarPlanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0000020000000000000018 /* CalendarPlanningView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		BF0000020000000000000015 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		BF0000020000000000000016 /* FabioDaily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FabioDaily.entitlements; sourceTree = "<group>"; };
 		BF0000020000000000000017 /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarService.swift; sourceTree = "<group>"; };
+		BF0000020000000000000018 /* CalendarPlanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPlanningView.swift; sourceTree = "<group>"; };
 		BF00000200000000000000FF /* FabioDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabioDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 				BF000004000000000000000C /* Main */,
 				BF000004000000000000000D /* Home */,
 				BF000004000000000000000E /* Meals */,
+				BF000004000000000000001C /* Calendar */,
 				BF000004000000000000000F /* MealPrep */,
 				BF0000040000000000000010 /* Workout */,
 				BF0000040000000000000011 /* Measurements */,
@@ -197,6 +200,14 @@
 				BF000002000000000000000A /* LogMealView.swift */,
 			);
 			path = Meals;
+			sourceTree = "<group>";
+		};
+		BF000004000000000000001C /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BF0000020000000000000018 /* CalendarPlanningView.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		BF000004000000000000000F /* MealPrep */ = {
@@ -406,6 +417,7 @@
 				BF0000010000000000000014 /* WithingsPlaceholder.swift in Sources */,
 				BF0000010000000000000015 /* HealthKitService.swift in Sources */,
 				BF0000010000000000000016 /* CalendarService.swift in Sources */,
+				BF0000010000000000000017 /* CalendarPlanningView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

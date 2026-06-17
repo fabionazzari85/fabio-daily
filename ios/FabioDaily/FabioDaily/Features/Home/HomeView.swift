@@ -92,7 +92,7 @@ struct HomeView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.green)
                 PrimaryButton(title: "Modifica giornata") {
-                    appState.showingDayContextEditor = true
+                    appState.editDayContext(date: today)
                 }
             }
         }
